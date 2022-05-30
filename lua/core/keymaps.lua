@@ -11,11 +11,18 @@ end
 
 keymaps.register({
     {
-    mode = { "" },
-    lhs = " ",
-    rhs = "<Nop>",
-    options = { silent = true },
-    description = "Remap space as leader key"
+        mode = { "" },
+        lhs = " ",
+        rhs = "<Nop>",
+        options = { silent = true },
+        description = "Remap space as leader key"
+    },
+    {
+        mode = { "n" },
+        lhs = "Q",
+        rhs = ":q<CR>",
+        options = { silent = true },
+        description = "退出"
     },
     {
         mode = { "n" },

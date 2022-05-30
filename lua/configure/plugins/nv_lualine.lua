@@ -9,7 +9,8 @@ local M = {
         "dbui",
     },
     platform_icons = {
-        unix = " ",
+        -- unix = " ",
+        unix = " ",
         dos = " ",
         mac = " ",
     },
@@ -31,8 +32,8 @@ function M.load()
             -- App theme
             theme = "auto",
             -- Separator
-            component_separators = { left = "", right = "" },
-            section_separators = { left = "", right = "" },
+            component_separators = { left = "", right = "" },
+            section_separators = { left = "", right = "" },
             -- Disabled file types
             disabled_filetypes = {},
             -- Enable global status bar

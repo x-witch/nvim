@@ -36,9 +36,12 @@ local packer_install_tbl = {
     ["Mofiqul/vscode.nvim"] = {
         cond = options.colorscheme == "vscode",
     },
-    ["projekt0n/github-nvim-theme"] = {
-        cond = options.colorscheme == "github-theme",
-    },
+    -- ["projekt0n/github-nvim-theme"] = {
+    --     cond = options.colorscheme == "github-theme",
+    -- },
+    -- ["sainnhe/everforest"] = {
+    --     cond = options.colorscheme == "everforest",
+    -- },
     --[[
 	=====================================
 	 ---------- Core function ----------
