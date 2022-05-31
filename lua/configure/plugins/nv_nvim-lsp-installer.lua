@@ -21,7 +21,7 @@ function M.load_lsp_config()
         cssls = require("configure.lsp.cssls"),
         tsserver = require("configure.lsp.tsserver"),
         vuels = require("configure.lsp.vuels"),
-        gopls = require("configure.lsp.gopls"),
+        -- gopls = require("configure.lsp.gopls"),
         pyright = require("configure.lsp.pyright"),
     }
 end

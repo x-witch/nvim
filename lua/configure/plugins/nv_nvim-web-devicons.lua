@@ -3,10 +3,10 @@ local M = {}
 function M.before() end
 
 function M.load()
-    local ok, m = pcall(require, "nvim-web-devicons")
-    if not ok then
-        return
-      end
+  local ok, m = pcall(require, "nvim-web-devicons")
+  if not ok then
+    return
+  end
 
   M.devicons = m
   M.devicons.setup({
@@ -88,7 +88,7 @@ function M.load()
         },
     },
     default = true,
-})
+    })
 end
 
 function M.after() end
