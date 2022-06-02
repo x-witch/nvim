@@ -46,11 +46,11 @@ function M.load()
           color = "#4FC08D",
           name = "Vue",
         },
-        py = {
-          icon = "",
-          color = "#3776AB",
-          name = "Python",
-        },
+        -- py = {
+        --   icon = "",
+        --   color = "#3776AB",
+        --   name = "Python",
+        -- },
         json = {
           icon = "",
           color = "#999999",

@@ -33,15 +33,13 @@ local packer_install_tbl = {
     ["askfiy/catppuccin"] = { -- dark purple theme
         cond = options.colorscheme == "catppuccin",
     },
-    ["Mofiqul/vscode.nvim"] = {
-        cond = options.colorscheme == "vscode",
-    },
+    -- ["Mofiqul/vscode.nvim"] = {
+    --     cond = options.colorscheme == "vscode",
+    -- },
     -- ["projekt0n/github-nvim-theme"] = {
     --     cond = options.colorscheme == "github-theme",
     -- },
-    -- ["sainnhe/everforest"] = {
-    --     cond = options.colorscheme == "everforest",
-    -- },
+    ["sainnhe/everforest"] = {},
     --[[
 	=====================================
 	 ---------- Core function ----------

@@ -143,17 +143,17 @@ vim.opt.shortmess:append("sI") -- reduce the display of <c-g>
 -- Reduce the display of <c-g>
 vim.opt.shortmess:append("sI")
 -- Allow h and l newlines
-vim.opt.whichwrap:append("<>[]hl")
+-- vim.opt.whichwrap:append("<>[]hl")
 -- Remove auto-comments
 vim.opt.formatoptions = vim.opt.formatoptions - { "c", "r", "o" }
 
-for prefix, tab in pairs(settings) do
+for prefix, tbl in pairs(settings) do
     if prefix ~= "disable_builtin_plugins" then
-        for key, value in pairs(tab) do
+        for key, value in pairs(tbl) do
             vim[prefix][key] = value
         end
     else
-        for _, plugin in pairs(tab) do
+        for _, plugin in pairs(tbl) do
             vim.g["loaded_" .. plugin] = 1
         end
     end
