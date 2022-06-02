@@ -8,12 +8,7 @@ local M = {
         "aerial",
         "dbui",
     },
-    platform_icons = {
-        -- unix = " ",
-        unix = " ",
-        dos = " ",
-        mac = " ",
-    },
+    platform_icons = icons.platform_icons,
 }
 
 function M.before() end

@@ -20,7 +20,7 @@ function M.load()
         term_colors = false,
         -- Set the style of treesitter
         styles = {
-            comments = "NONE",
+            comments = "italic",
             functions = "NONE",
             keywords = "NONE",
             strings = "NONE",

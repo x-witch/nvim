@@ -10,4 +10,12 @@ str.title = function(s)
     end))
 end
 
+str.starts_with = function(strings, start)
+  return strings:sub(1, #start) == start
+end
+
+str.ends_with = function(strings, ending)
+  return ending == "" or strings:sub(- #ending) == ending
+end
+
 return str

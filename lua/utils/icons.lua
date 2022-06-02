@@ -40,6 +40,13 @@ icons.kind = {
     TypeParameter = "",
 }
 
+icons.platform_icons = {
+    -- unix = " ",
+    unix = " ",
+    dos = " ",
+    mac = " ",
+}
+
 icons.vscode = {
     Text = " ",
     Method = " ",

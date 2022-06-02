@@ -117,11 +117,11 @@ function M.load()
         -- { behavior = M.cmp.SelectBehavior.Select }
         mapping = {
             ["<cr>"] = M.cmp.mapping(M.cmp.mapping.confirm(), { "i", "s", "c" }),
-            ["<c-p>"] = M.cmp.mapping(M.cmp.mapping.select_prev_item(), { "i", "s", "c" }),
-            ["<c-n>"] = M.cmp.mapping(M.cmp.mapping.select_next_item(), { "i", "s", "c" }),
+            ["<tab>"] = M.cmp.mapping(M.cmp.mapping.select_prev_item(), { "i", "s", "c" }),
+            ["<s-tab>"] = M.cmp.mapping(M.cmp.mapping.select_next_item(), { "i", "s", "c" }),
             ["<c-b>"] = M.cmp.mapping(M.cmp.mapping.scroll_docs(-5), { "i", "s", "c" }),
             ["<c-f>"] = M.cmp.mapping(M.cmp.mapping.scroll_docs(5), { "i", "s", "c" }),
-            ["<tab>"] = M.cmp.mapping(M.cmp.mapping.confirm({ select = true }), { "i", "s", "c" }),
+            -- ["<tab>"] = M.cmp.mapping(M.cmp.mapping.confirm({ select = true }), { "i", "s", "c" }),
             ["<c-u>"] = M.cmp.mapping(function(fallback)
                 if M.cmp.visible() then
                     for i = 1, 5, 1 do
@@ -186,18 +186,21 @@ end
 function M.after()
     -- Define completion in cmd mode
     M.cmp.setup.cmdline("/", {
+        mapping = M.cmp.mapping.preset.cmdline(),
         sources = {
             { name = "buffer" },
         },
     })
 
     M.cmp.setup.cmdline("?", {
+        mapping = M.cmp.mapping.preset.cmdline(),
         sources = {
             { name = "buffer" },
         },
     })
 
     M.cmp.setup.cmdline(":", {
+        mapping = M.cmp.mapping.preset.cmdline(),
         sources = M.cmp.config.sources({
             { name = "path" },
             { name = "cmdline" },
