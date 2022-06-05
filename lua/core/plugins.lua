@@ -1,6 +1,3 @@
-local options = require("core.options")
-local path = require("utils.api.path")
-
 local packer_install_tbl = {
     --[[
 	=====================================
@@ -30,16 +27,15 @@ local packer_install_tbl = {
 	 ------------- Theme ---------------
 	=====================================
 	--]]
-    ["askfiy/catppuccin"] = { -- dark purple theme
-        cond = options.colorscheme == "catppuccin",
-    },
-    -- ["Mofiqul/vscode.nvim"] = {
+    ["askfiy/catppuccin"] = {},
+    -- ["fiqul/vscode.nvim"] = {
     --     cond = options.colorscheme == "vscode",
     -- },
     -- ["projekt0n/github-nvim-theme"] = {
     --     cond = options.colorscheme == "github-theme",
     -- },
     ["sainnhe/everforest"] = {},
+    ["goolord/alpha-nvim"] = {},
     --[[
 	=====================================
 	 ---------- Core function ----------
@@ -49,10 +45,14 @@ local packer_install_tbl = {
         after = { "nvim-web-devicons", "gitsigns.nvim" },
     },
     ["kyazdani42/nvim-tree.lua"] = { -- file tree view
+        tag = 'nightly',
         after = { "nvim-web-devicons" },
         cmd = { "NvimTreeToggle", "NvimTreeFindFile" },
     },
     ["akinsho/bufferline.nvim"] = { -- buffer label
+        after = { "nvim-web-devicons" },
+    },
+    ["famiu/bufdelete.nvim"] = {
         after = { "nvim-web-devicons" },
     },
     ["mbbill/undotree"] = { -- undo tree
@@ -93,6 +93,7 @@ local packer_install_tbl = {
     ["kosayoda/nvim-lightbulb"] = { -- prompt a lightbulb when code behavior is available
         after = { "nvim-lsp-installer" },
     },
+    ["ray-x/lsp_signature.nvim"] = {},
     --[[
 	=====================================
 	 --------- Code Completion ---------
@@ -206,9 +207,9 @@ local packer_install_tbl = {
     ["ur4ltz/surround.nvim"] = { -- modify surround
         event = { "BufRead", "BufNewFile" },
     },
-    ["folke/todo-comments.nvim"] = { -- highlight and find all TODO comments
-        event = { "BufRead", "BufNewFile" },
-    },
+    --["folke/todo-comments.nvim"] = { -- highlight and find all TODO comments
+      --  event = { "BufRead", "BufNewFile" },
+    --},
     ["AndrewRadev/switch.vim"] = { -- quickly switch the opposite of the word
         ptp = "viml",
         cmd = { "Switch" },
@@ -256,7 +257,7 @@ local packer_install_tbl = {
     ["davidgranstrom/nvim-markdown-preview"] = { -- markdown preview tool
         ptp = "viml",
         ft = { "markdown" },
-        cmd = { "MarkdownPreview" },
+        cmd = { "rkdownPreview" },
     },
     ["askfiy/nvim-picgo"] = { -- image uploader
         module = "nvim-picgo",
@@ -299,81 +300,58 @@ local packer_install_tbl = {
     ["akinsho/toggleterm.nvim"] = { -- Beautify neovim default terminal
         module = "toggleterm",
     },
-    ["uga-rosa/translate.nvim"] = { -- an excellent translation plugin
-        cmd = { "Translate" },
-    },
+    --["uga-rosa/translate.nvim"] = { -- an excellent translation plugin
+      --  cmd = { "Translate" },
+    --},
     ["jghauser/mkdir.nvim"] = {
         event = "CmdlineEnter",
     },
 }
 
-Packer_bootstrap = (function()
-    local packer_install_path = path.join(vim.fn.stdpath("data"), "site/pack/packer/start/packer.nvim")
-    ---@diagnostic disable-next-line: missing-parameter
-    if vim.fn.empty(vim.fn.glob(packer_install_path)) > 0 then
-        local rtp_addition = string.format("%s/site/pack/*/start/*", vim.fn.stdpath("data"))
-        vim.notify("Please wait ...\nInstalling packer package manager ...", "info", { title = "Packer" })
-        if not string.find(vim.o.runtimepath, rtp_addition) then
-            vim.o.runtimepath = string.format("%s,%s", rtp_addition, vim.o.runtimepath)
-        end
-        return vim.fn.system({
-            "git",
-            "clone",
-            "--depth",
-            "1",
-            "https://github.com/wbthomason/packer.nvim",
-            packer_install_path,
-        })
-    end
-end)()
+
+fn = vim.fn
+local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
+
+packer_bootstrap = function()
+   vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#1e222a" })
+
+   if fn.empty(fn.glob(install_path)) > 0 then
+      vim.notify("Please wait ...\nInstalling packer package manager ...", "info", { title = "Packer" })
+      fn.system { "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path }
+
+      -- install plugins + compile their configs
+      vim.cmd "packadd packer.nvim"
+      vim.cmd "PackerSync"
+   end
+end
 
 local packer = require("packer")
 
 packer.init({
-    git = {
-        -- For Chinese users, if the download is slow, you can switch to the github mirror source
-        -- replace : https://hub.fastgit.xyz/%s
-        default_url_format = "https://github.com/%s",
-    },
+   auto_clean = true,
+   compile_on_sync = true,
+   git = { clone_timeout = 6000 },
+   display = {
+      working_sym = " ﲊ",
+      error_sym = "✗ ",
+      done_sym = " ",
+      removed_sym = " ",
+      moved_sym = "",
+      open_fn = function()
+         return require("packer.util").float { border = "single" }
+      end,
+   },
 })
+
 
 packer.startup({
     function(use)
         for plug_name, plug_config in pairs(packer_install_tbl) do
             local plug_options = vim.tbl_deep_extend("force", { plug_name }, plug_config)
-            local plug_filename = plug_options.as or string.match(plug_name, "/([%w%-_]+).?")
-            -- The plugin configuration module that needs to be loaded
-            local load_disk_path = path.join("configure", "plugins", string.format("nv_%s", plug_filename:lower()))
-            -- Path of the plugin configuration module on disk
-            local file_disk_path = path.join(vim.fn.stdpath("config"), "lua", string.format("%s.lua", load_disk_path))
-            -- If the path exists, load the configuration, otherwise apply the plugin directly
-            if path.is_exists(file_disk_path) then
-                if plug_config.ptp == "viml" then
-                    plug_options.setup = string.format("require('%s').entrance()", load_disk_path)
-                else
-                    plug_options.setup = string.format("require('%s').before()", load_disk_path)
-                    plug_options.config = string.format(
-                        [[
-                        require('%s').load()
-                        require('%s').after()
-                        ]],
-                        load_disk_path,
-                        load_disk_path
-                    )
-                end
-            end
             use(plug_options)
         end
-        if Packer_bootstrap then
-            -- Automatically download plugins when neovim is opened for the first time
-            packer.sync()
-        end
     end,
-    -- Preview with floating window
-    config = { display = { open_fn = require("packer.util").float } },
 })
-
-local packer_user_config = vim.api.nvim_create_augroup("packer_user_config", { clear = true })
 
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     pattern = { "plugins.lua" },
