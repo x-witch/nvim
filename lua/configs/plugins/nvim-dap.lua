@@ -29,26 +29,22 @@
 local mapping = require("core.keybinds")
 
 
-local function load_dap_config()
-    -- Load adapter configuration file
-    local dubug_adapter_config = {
-        -- go = require("configs.dap.go"),
-        python = require("configs.dap.python"),
-        -- dotnet = require("configs.dap.dotnet"),
-    }
-end
-
-
-local ok, m = pcall(require, "dap")
+local ok, dap = pcall(require, "dap")
 if not ok then
     return
 end
 
-load_dap_config()
+-- Load adapter configuration file
+local dubug_adapter_config = {
+    -- go = require("configs.dap.go"),
+    python = require("configs.dap.python"),
+    -- dotnet = require("configs.dap.dotnet"),
+}
 
-for _, dap_config in pairs(M.dubug_adapter_config) do
-    dap.adapters = vim.tbl_deep_extend("force", M.dap.adapters, dap_config.adapters)
-    dap.configurations = vim.tbl_deep_extend("force", M.dap.configurations, dap_config.configurations)
+
+for _, dap_config in pairs(dubug_adapter_config) do
+    dap.adapters = vim.tbl_deep_extend("force", dap.adapters, dap_config.adapters)
+    dap.configurations = vim.tbl_deep_extend("force", dap.configurations, dap_config.configurations)
 end
 
 mapping.register({

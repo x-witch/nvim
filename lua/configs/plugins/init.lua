@@ -5,11 +5,13 @@ end
 local config_dir = vim.fn.stdpath('config') .. '/lua/configs/plugins'
 -- plugins do not need to load, NOTE: no .lua suffix required
 local unload_plugins = {
-    "init", -- we don't need to load init again   
+    "init", -- we don't need to load init again
     "nvim-markdown-previewrkdown-prview",
     "translate",
     "neoformat",
     "sniprun",
+    "hop",
+    "venn",
 }
 
 local helper_set = {}

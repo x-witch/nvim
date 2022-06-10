@@ -203,8 +203,8 @@ local cmp_config = {
   },
   sources = {
     { name = "nvim_lsp" },
-    { name = "luasnip" },
-    -- { name = "vsnip" },
+    -- { name = "luasnip" },
+    { name = "vsnip" },
     { name = "path" },
     { name = "buffer" },
     { name = "cmdline" },

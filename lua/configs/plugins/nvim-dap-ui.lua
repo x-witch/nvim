@@ -60,7 +60,7 @@ mapping.register({
                     return
                 end
             end
-            require("dapui").eval(vim.fn.input("Enter debug expression: "))
+            -- require("dapui").eval(vim.fn.input("Enter debug expression: "))
         end,
         options = { silent = true },
         description = "Execute debug expressions",

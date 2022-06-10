@@ -8,7 +8,7 @@ if not ok then
 end
 
 persisted.setup({
-    save_dir = vim.fn.stdpath("cache") .. "sessions",
+    save_dir = vim.fn.stdpath("cache") .. "/sessions",
     use_git_branche = true,
     command = "VimLeavePre",
     autosave = true,
@@ -28,7 +28,7 @@ mapping.register({
         description = "Load session",
     },
     {
-        mode = { "n" },
+       mode = { "n" },
         lhs = "<leader>ss",
         rhs = function()
             vim.cmd("silent! SessionSave")

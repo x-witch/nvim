@@ -127,6 +127,7 @@ return packer.startup(function(use)
     -- 目录大纲
     use({
         "kyazdani42/nvim-tree.lua",
+        tag = 'nightly',
         after = { "nvim-web-devicons" }
     })
     use({
@@ -195,11 +196,11 @@ return packer.startup(function(use)
         event = { "InsertEnter", "CmdlineEnter" },
     })
     use({
-        "L3MON4D3/LuaSnip",
-        event = { "InsertEnter", "CmdlineEnter" },
+        "hrsh7th/vim-vsnip",
+        after = { "friendly-snippets" },
     })
     use({
-        "saadparwaiz1/cmp_luasnip",
+        "hrsh7th/cmp-vsnip",
         after = { "nvim-cmp" },
     })
     use({
@@ -241,11 +242,11 @@ return packer.startup(function(use)
     })
     use({
         "theHamsta/nvim-dap-virtual-text",
-        module = "nvim-dap",
+        after = { "nvim-dap" },
     })
     use({
         "rcarriga/nvim-dap-ui",
-        module = "nvim-dap",
+        after = { "nvim-dap" },
     })
 
     --[[
@@ -308,7 +309,7 @@ return packer.startup(function(use)
         "numToStr/Comment.nvim",
         after = { "nvim-ts-context-commentstring" },
     })
-    use({
+    use({ -- 点模式增强
         "tpope/vim-repeat",
         fn = "repeat#set",
     })
@@ -358,11 +359,11 @@ return packer.startup(function(use)
 	 ------ Documentation editing ------
 	=====================================
 	--]]
-    use({
-        "phaazon/hop.nvim",
-        module = "hop",
-        cmd = { "HopWord", "HopLine", "HopChar1", "HopChar1CurrentLine" },
-    })
+    -- use({
+    --     "phaazon/hop.nvim",
+    --     module = "hop",
+    --     cmd = { "HopWord", "HopLine", "HopChar1", "HopChar1CurrentLine" },
+    -- })
     use({
         "kevinhwang91/nvim-hlslens",
         module = "hlslens",
@@ -376,10 +377,10 @@ return packer.startup(function(use)
         "mg979/vim-visual-multi",
         fn = { "vm#commands#add_cursor_up", "vm#commands#add_cursor_down" },
     })
-    use({
-        "jbyuki/venn.nvim",
-        module = "venn",
-    })
+    -- use({
+    --     "jbyuki/venn.nvim",
+    --     module = "venn",
+    -- })
     use({
         "kristijanhusak/vim-carbon-now-sh",
         cmd = { "CarbonNowSh" },
@@ -406,10 +407,10 @@ return packer.startup(function(use)
         "akinsho/toggleterm.nvim",
         module = "toggleterm",
     })
-    use({
-        "akinsho/toggleterm.nvim",
-        module = "toggleterm",
-    })
+    -- use({
+    --     "uga-rosa/translate.nvim",
+    --     cmd = { "Translate" },
+    -- })
     use({
         "jghauser/mkdir.nvim",
         event = "CmdlineEnter",
@@ -418,7 +419,6 @@ return packer.startup(function(use)
          "michaelb/sniprun",
         run = "bash ./install.sh",
     })
-    use("tpope/vim-repeat") -- .点模式增强
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

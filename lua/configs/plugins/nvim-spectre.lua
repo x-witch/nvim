@@ -8,39 +8,42 @@ if not status_ok then
 	return
 end
 
-spectre.setup(
+local mapping = require("core.keybinds")
+
+spectre.setup()
+
+mapping.register({
     {
-        mapping = {
-            -- 删除选中
-            ["toggle_line"] = {
-                map = "dd",
-                cmd = "<cmd>lua require('spectre').toggle_line()<CR>",
-                desc = "toggle current item"
-            },
-            -- 前往文件
-            ["enter_file"] = {
-                map = "o",
-                cmd = "<cmd>lua require('spectre.actions').select_entry()<CR>",
-                desc = "goto current file"
-            },
-            -- 查看菜单（忽略大小写、忽略隐藏文件）
-            ["show_option_menu"] = {
-                map = "<leader>o",
-                cmd = "<cmd>lua require('spectre').show_options()<CR>",
-                desc = "show option"
-            },
-            -- 开始替换
-            ["run_replace"] = {
-                map = "<leader>r",
-                cmd = "<cmd>lua require('spectre.actions').run_replace()<CR>",
-                desc = "replace all"
-            },
-            -- 显示差异
-            ["change_view_mode"] = {
-                map = "<leader>v",
-                cmd = "<cmd>lua require('spectre').change_view()<CR>",
-                desc = "change result view mode"
-            }
-        }
-    }
-)
+        mode = { "n" },
+        lhs = "<leader>rp",
+        rhs = function()
+            aux.toggle_sidebar("spectre_panel")
+            require("spectre").open()
+        end,
+        options = { silent = true },
+        description = "Replace characters in all files in the current workspace",
+    },
+    {
+        mode = { "n" },
+        lhs = "<leader>rf",
+        rhs = function()
+            aux.toggle_sidebar("spectre_panel")
+            -- FIX: Invalid selected word ..
+            -- vim.cmd("normal! viw")
+            require("spectre").open_file_search()
+        end,
+        options = { silent = true },
+        description = "Replace all characters in the current file",
+    },
+    {
+        mode = { "n" },
+        lhs = "<leader>rw",
+        rhs = function()
+            aux.toggle_sidebar("spectre_panel")
+            require("spectre").open_visual({ select_word = true })
+        end,
+        options = { silent = true },
+        description = "Replace the character under the cursor in all files under the current workspace",
+    },
+})
+
