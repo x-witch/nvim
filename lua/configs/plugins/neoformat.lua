@@ -19,3 +19,13 @@ vim.g.neoformat_only_msg_on_error = 1
 --   command = "undojoin | Neoformat",
 --   nested = true,
 -- })
+local mapping = require('core.keybinds')
+mapping.register({
+    {
+    mode = { "n" },
+    lhs = "<leader>fl",
+    rhs = "<cmd>Neoformat<CR>",
+    options = { silent = true },
+    description = "Neoformat 格式化"
+    },
+})

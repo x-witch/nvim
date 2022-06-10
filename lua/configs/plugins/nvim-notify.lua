@@ -1,9 +1,12 @@
 -- https://github.com/rcarriga/nvim-notify
+
 local status_ok, notify =  pcall(require, "notify")
 if not status_ok then
   vim.notify("notify module not found!")
   return
 end
+
+local mapping = require('core.keybinds')
 
 vim.notify = notify
 notify.setup({
@@ -42,4 +45,14 @@ notify.setup({
     DEBUG = "",
     TRACE = "✎",
   },
+})
+
+mapping.register({
+    {
+    mode = { "n" },
+    lhs = "<leader>fn",
+    rhs = "<cmd>lua require('telescope').extensions.notify.notify()<CR>",
+    options = { silent = true },
+    description = "nvim-notify 显示历史弹窗记录（需安装 telescope 插件）"
+    },
 })
