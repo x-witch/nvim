@@ -144,7 +144,7 @@ vim.g.python_path = "/usr/bin/python3"
 -- lint 配置文件路径
 vim.g.lint_config_dir = vim.fn.stdpath("config") .. "/lint"
 -- 代码片段存储路径
- vim.g.vsnip_snippet_dir = vim.fn.stdpath("config") .. "/snippets"
+vim.g.vsnip_snippet_dir = vim.fn.stdpath("config") .. "/snippets"
 -- undotree 缓存存放路径
 vim.g.undotree_dir = vim.fn.stdpath("cache") .. "/undotree"
 
