@@ -22,117 +22,153 @@
 -- R     ：刷新资源管理器
 -- 另外，文件资源管理器操作和操作文档方式一致，可按 / ? 进行搜索
 
--- 目录后加上反斜杠 /
-vim.g.nvim_tree_add_trailing = 1
+vim.g.nvim_tree_icons = {
+  default = "",
+  symlink = "",
+  git = {
+    unstaged = "",
+    staged = "S",
+    unmerged = "",
+    renamed = "➜",
+    deleted = "",
+    untracked = "U",
+    ignored = "◌",
+  },
+  folder = {
+    arrow_open = "",
+    arrow_closed = "",
+    default = "",
+    open = "",
+    empty = "",
+    empty_open = "",
+    symlink = "",
+  },
+}
 
-vim.g.nvim_tree_git_hl = 1
-vim.g.nvim_tree_highlight_opened_files = 0
-
-
-local mapping = require('core.mappings')
-local icons = require("common.icons")
+local mapping = require('core.keybinds')
 
 local status_ok, nvim_tree = pcall(require, "nvim-tree")
 if not status_ok then
-    vim.notify("nvim-tree not found!")
-    return
+  vim.notify("nvim-tree not found!")
+  return
 end
 
 nvim_tree.setup({
-    -- Disable netrw
-    disable_netrw = false,
-    -- Hijack the netrw window
-    hijack_netrw = false,
-    -- Keeps the cursor on the first letter of the filename when moving in the tree.
-    hijack_cursor = true,
-    -- Refresh tree when changing root
+  auto_reload_on_write = true,
+  disable_netrw = false,
+  hijack_cursor = false,
+  hijack_netrw = true,
+  hijack_unnamed_buffer_when_opening = false,
+  ignore_buffer_on_setup = false,
+  open_on_setup = false,
+  open_on_setup_file = false,
+  open_on_tab = false,
+  sort_by = "name",
+  view = {
+    width = 30,
+    height = 30,
+    hide_root_folder = false,
+    side = "left",
+    preserve_window_proportions = false,
+    number = false,
+    relativenumber = false,
+    signcolumn = "yes",
+    mappings = {
+      custom_only = false,
+      list = {
+        -- user mappings go here
+        { key = { "l", "<CR>", "o" }, action = "edit" },
+        { key = "h", action = "close_node" },
+        { key = "v", action = "vsplit" },
+        { key = "O", action = "cd" },
+      },
+    },
+  },
+  renderer = {
+    indent_markers = {
+      enable = false,
+      icons = {
+        corner = "└ ",
+        edge = "│ ",
+        none = "  ",
+      },
+    },
+    icons = {
+      webdev_colors = true,
+    },
+  },
+  hijack_directories = {
+    enable = true,
+    auto_open = true,
+  },
+  update_focused_file = {
+    enable = true,
     update_cwd = true,
-    -- Ignored file types
-    ignore_ft_on_setup = { "dashboard" },
-    -- Auto-reload tree (BufEnter event)
-    reload_on_bufenter = true,
-    -- Update the focused file on `BufEnter`, un-collapses the folders recursively
-    -- until it finds the file.
-    update_focused_file = {
+    ignore_list = {},
+  },
+  ignore_ft_on_setup = {},
+  system_open = {
+    cmd = "",
+    args = {},
+  },
+  diagnostics = {
+    enable = true,
+    show_on_dirs = true,
+    icons = {
+      hint = "",
+      info = "",
+      warning = "",
+      error = "",
+    },
+  },
+  filters = {
+    dotfiles = false,
+    custom = {},
+    exclude = {},
+  },
+  git = {
+    enable = true,
+    ignore = true,
+    timeout = 400,
+  },
+  actions = {
+    use_system_clipboard = true,
+    change_dir = {
+      enable = true,
+      global = false,
+      restrict_above_cwd = false,
+    },
+    open_file = {
+      quit_on_open = false,
+      resize_window = false,
+      window_picker = {
         enable = true,
-        update_cwd = false,
-    },
-    view = {
-        side = "left",
-        width = 30,
-        hide_root_folder = false,
-        signcolumn = "yes",
-    },
-    diagnostics = {
-        enable = true,
-        show_on_dirs = true,
-        icons = {
-            hint = icons.diagnostics.Hint,
-            info = icons.diagnostics.Info,
-            warning = icons.diagnostics.Warn,
-            error = icons.diagnostics.Error,
+        chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
+        exclude = {
+          filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame" },
+          buftype = { "nofile", "terminal", "help" },
         },
+      },
     },
-    actions = {
-        use_system_clipboard = true,
-        change_dir = {
-            enable = true,
-            global = true,
-            restrict_above_cwd = false,
-        },
-        open_file = {
-            resize_window = true,
-            window_picker = {
-                enable = true,
-            },
-        },
+  },
+  trash = {
+    cmd = "trash",
+    require_confirm = true,
+  },
+  log = {
+    enable = false,
+    truncate = false,
+    types = {
+      all = false,
+      config = false,
+      copy_paste = false,
+      diagnostics = false,
+      git = false,
+      profile = false,
     },
-    trash = {
-        cmd = "trash",
-        require_confirm = true,
-    },
-    filters = {
-        dotfiles = false,
-        custom = { "node_modules", "\\.cache", "__pycache__" },
-        exclude = {},
-    },
-    renderer = {
-        add_trailing = true,
-        highlight_git = true,
-        highlight_opened_files = "none",
-        icons = {
-            show = {
-                file = true,
-                folder = true,
-                folder_arrow = true,
-                git = true,
-            },
-            glyphs = {
-                default = "",
-                symlink = "",
-                folder = {
-                    arrow_closed = "",
-                    arrow_open = "",
-                    default = "",
-                    open = "",
-                    empty = "",
-                    empty_open = "",
-                    symlink = "",
-                    symlink_open = "",
-                },
-                git = {
-                    unstaged = "✗",
-                    staged = "✓",
-                    unmerged = "",
-                    renamed = "➜",
-                    untracked = "★ ",
-                    deleted = "",
-                    ignored = "◌",
-                },
-            },
-        },
-    },
-})
+  },
+}
+)
 
 mapping.register({
     {
@@ -152,7 +188,8 @@ mapping.register({
 })
 
 
-
+-- 目录后加上反斜杠 /
+vim.g.nvim_tree_add_trailing = 1
 -- with relative path
 require "nvim-tree.events".on_file_created(function(file) vim.cmd("edit " .. file.fname) end)
 -- with absolute path
@@ -164,3 +201,4 @@ vim.cmd(
     autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif
 ]]
 )
+

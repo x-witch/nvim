@@ -1,6 +1,6 @@
 -- https://github.com/olimorris/persisted.nvim
 
-local mapping = require("core.mappings")
+local mapping = require("core.keybinds")
 
 local ok, persisted = pcall(require, "persisted")
 if not ok then

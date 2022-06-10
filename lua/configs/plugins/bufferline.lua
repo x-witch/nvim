@@ -5,8 +5,8 @@ if not status_ok then
   return
 end
 
-local icons = require("common.icons")
-local mapping = require("core.mappings")
+local icons = require("utility.icons")
+local mapping = require("core.keybinds")
 
 bufferline.setup({
     options = {
@@ -18,7 +18,7 @@ bufferline.setup({
         indicator_icon = "▎",
         -- It is not recommended to modify the icons below
         buffer_close_icon = "",
-        modified_icon = "●",
+        modified_icon = "● ",
         close_icon = "",
         left_trunc_marker = "",
         right_trunc_marker = "",

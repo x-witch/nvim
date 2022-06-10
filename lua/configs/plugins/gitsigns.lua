@@ -1,69 +1,13 @@
 -- https://github.com/lewis6991/gitsigns.nvim
 
-local mapping = require("core.mappings")
-
--- default add and change text: │
-local add_symbol = "+"
-local change_symbol = "~"
-local delete_symbol = "-"
-local topdelte_symbol = "‾ "
-local changedelete_symbol = "_"
-
-
 local ok, gitsigns = pcall(require, "gitsigns")
 if not ok then
     return
 end
 
-gitsigns.setup({
-    on_attach = function(bufnr)
-        register_buffer_key(bufnr)
-    end,
-    signs = {
-        add = { hl = "GitSignsAdd", text = add_symbol, numhl = "GitSignsAddNr", linehl = "GitSignsAddLn" },
-        change = {
-            hl = "GitSignsChange",
-            text = change_symbol,
-            numhl = "GitSignsChangeNr",
-            linehl = "GitSignsChangeLn",
-        },
-        delete = {
-            hl = "GitSignsDelete",
-            text = delete_symbol,
-            numhl = "GitSignsDeleteNr",
-            linehl = "GitSignsDeleteLn",
-        },
-        topdelete = {
-            hl = "GitSignsDelete",
-            text = topdelte_symbol,
-            numhl = "GitSignsDeleteNr",
-            linehl = "GitSignsDeleteLn",
-        },
-        changedelete = {
-            hl = "GitSignsChange",
-            text = changedelete_symbol,
-            numhl = "GitSignsChangeNr",
-            linehl = "GitSignsChangeLn",
-        },
-        current_line_blame_opts = {
-            virt_text = true,
-            virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
-            delay = 100,
-            ignore_whitespace = false,
-        },
-        preview_config = {
-            -- Options passed to nvim_open_win
-            border = "rounded",
-            style = "minimal",
-            relative = "cursor",
-            row = 0,
-            col = 1,
-        },
-    },
-})
+local mapping = require("core.keybinds")
 
-
-function register_buffer_key(bufnr)
+local function register_buffer_key(bufnr)
     mapping.register({
         {
             mode = { "n" },
@@ -130,3 +74,57 @@ function register_buffer_key(bufnr)
         },
     })
 end
+
+gitsigns.setup({
+    on_attach = function(bufnr)
+        register_buffer_key(bufnr)
+    end,
+    signs = {
+        add = {
+            hl = "GitSignsAdd",
+            text = "+",
+            numhl = "GitSignsAddNr",
+            linehl = "GitSignsAddLn"
+        },
+        change = {
+            hl = "GitSignsChange",
+            text = "~",
+            numhl = "GitSignsChangeNr",
+            linehl = "GitSignsChangeLn",
+        },
+        delete = {
+            hl = "GitSignsDelete",
+            text = "-",
+            numhl = "GitSignsDeleteNr",
+            linehl = "GitSignsDeleteLn",
+        },
+        topdelete = {
+            hl = "GitSignsDelete",
+            text = "‾ ",
+            numhl = "GitSignsDeleteNr",
+            linehl = "GitSignsDeleteLn",
+        },
+        changedelete = {
+            hl = "GitSignsChange",
+            text = "_",
+            numhl = "GitSignsChangeNr",
+            linehl = "GitSignsChangeLn",
+        },
+        current_line_blame_opts = {
+            virt_text = true,
+            virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
+            delay = 100,
+            ignore_whitespace = false,
+        },
+        preview_config = {
+            -- Options passed to nvim_open_win
+            border = "rounded",
+            style = "minimal",
+            relative = "cursor",
+            row = 0,
+            col = 1,
+        },
+    },
+})
+
+

@@ -5,11 +5,9 @@ if present then
     impatient.enable_profile()
 end
 
-require("core.options")
-require("core.mappings")
+require("core.settings")
+require("core.keybinds")
 require("core.plugins")
-require("core.autocmds")
-require("core.default_config")
 require("core.utils")
 require("configs.plugins")
 

@@ -1,7 +1,5 @@
 -- https://github.com/catppuccin/nvim
 
-local options = require("core.default_config").options
-
 local ok, catppuccin = pcall(require, "catppuccin")
 if not ok then
     return
@@ -9,7 +7,7 @@ end
 
 catppuccin.setup({
     -- Whether the background is transparent
-    transparent_background = options.transparent_background,
+    transparent_background = false,
     -- Whether to follow terminal color
     term_colors = false,
     -- Set the style of treesitter
@@ -64,7 +62,7 @@ catppuccin.setup({
         nvimtree = {
             enabled = true,
             show_root = false,
-            transparent_panel = options.transparent_background,
+            transparent_panel = false,
         },
         indent_blankline = {
             enabled = true,

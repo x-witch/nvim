@@ -3,20 +3,28 @@
 -- WARN: If you open venn mode too early, it may cause some keys in the buffer to fail
 -- So it is recommended not to open venn mode in code files
 
-local mapping = require("core.mappings")
+local mapping = require("core.keybinds")
 
-local notify = nil
-local cache_buffer_mappings = {}
+local M = {
+    notify = nil,
+    cache_buffer_mappings = {},
+}
 
-local ok, venn = pcall(require, "venn")
+M.register_global_key()
+
+local ok, m = pcall(require, "venn")
 if not ok then
     return
 end
 
-function open_venn_notify()
+M.venn = m
+
+M.wrapper_command()
+
+function M.open_venn_notify()
     ---@diagnostic disable-next-line: missing-parameter
     vim.notify.dismiss()
-    notify = vim.notify("Venn enabled", "info", {
+    M.notify = vim.notify("Venn enabled", "info", {
         title = "Venn",
         keep = function()
             return vim.b.venn_enabled
@@ -25,43 +33,45 @@ function open_venn_notify()
     })
 end
 
-function close_venn_notify()
+function M.close_venn_notify()
     vim.notify("Venn disabled", "info", {
         title = "Venn",
         render = "minimal",
-        replace = notify,
+        replace = M.notify,
     })
 end
 
-function wrapper_command()
-    venn.toggle_venn_mode = function()
+function M.get_buffer_keymap() end
+
+function M.wrapper_command()
+    M.venn.toggle_venn_mode = function()
         local venn_enable = vim.b.venn_enabled
         if not venn_enable then
             vim.b.venn_enabled = true
             vim.wo.virtualedit = "all"
-            cache_buffer_key()
-            register_buffer_key(0)
-            open_venn_notify()
+            M.cache_buffer_key()
+            M.register_buffer_key(0)
+            M.open_venn_notify()
         else
             vim.b.venn_enabled = false
             vim.wo.virtualedit = ""
             vim.cmd([[mapclear <buffer>]])
-            remap_buffer_key()
-            close_venn_notify()
+            M.remap_buffer_key()
+            M.close_venn_notify()
         end
     end
 end
 
-function cache_buffer_key()
+function M.cache_buffer_key()
     for _, mode in ipairs({ "i", "v", "n" }) do
-        buffer_mappings = vim.tbl_deep_extend("force", cache_buffer_mappings, vim.api.nvim_buf_get_keymap(0, mode))
+        M.buffer_mappings = vim.tbl_deep_extend("force", M.cache_buffer_mappings, vim.api.nvim_buf_get_keymap(0, mode))
     end
     vim.tbl_filter(function(key_map)
         return key_map.desc
-    end, cache_buffer_mappings)
+    end, M.cache_buffer_mappings)
 end
 
-function remap_buffer_key()
+function M.remap_buffer_key()
     vim.tbl_map(function(key_map)
         if key_map.mode == " " then
             return
@@ -73,22 +83,24 @@ function remap_buffer_key()
             silent = key_map.silent,
             expr = key_map.expr,
         })
-    end, cache_buffer_mappings)
+    end, M.cache_buffer_mappings)
 end
 
-mapping.register({
-    {
-        mode = { "n" },
-        lhs = "<leader>5",
-        rhs = function()
-            require("venn").toggle_venn_mode()
-        end,
-        options = { silent = true },
-        description = "Open Venn de",
-    },
-})
+function M.register_global_key()
+    mapping.register({
+        {
+            mode = { "n" },
+            lhs = "<leader>5",
+            rhs = function()
+                require("venn").toggle_venn_mode()
+            end,
+            options = { silent = true },
+            description = "Open Venn Mode",
+        },
+    })
+end
 
-function register_buffer_key(bufnr)
+function M.register_buffer_key(bufnr)
     mapping.register({
         {
             mode = { "n" },
@@ -134,3 +146,5 @@ function register_buffer_key(bufnr)
         },
     })
 end
+
+return M

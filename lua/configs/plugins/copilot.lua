@@ -1,6 +1,6 @@
 -- https://github.com/github/copilot.vim
 
-local mapping = require("core.mappings")
+local mapping = require("core.keybinds")
 
 
 -- Disable default tab completion

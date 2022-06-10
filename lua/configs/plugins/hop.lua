@@ -1,16 +1,13 @@
 -- https://github.com/phaazon/hop.nvim
 
-local mapping = require("core.mappings")
+local mapping = require("core.keybinds")
 
 local ok, hop = pcall(require, "hop")
 if not ok then
     return
 end
 
-hop.setup({
-    -- Assign key
-    { keys = "qwertyuiopasdfghjklzxcvbnm" }
-})
+hop.setup()
 
 mapping.register({
     {

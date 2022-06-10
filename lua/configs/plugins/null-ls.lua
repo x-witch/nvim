@@ -1,8 +1,5 @@
 -- https://github.com/jose-elias-alvarez/null-ls.nvim
 
-local path_join = require("core.utils").path_join
-local options = require("core.default_config").options
-
 local ok, null_ls = pcall(require, "null-ls")
 if not ok then
     return
@@ -20,15 +17,6 @@ null_ls.setup({
                 "--indent-width=4",
             },
         }),
-        -- null_ls.builtins.diagnostics.pylint.with({
-        --     extra_args = {
-        --         "-f",
-        --         "json",
-        --         "--load-plugins=pylint_django",
-        --         "--disable=django-not-configured",
-        --         "--rcfile=" .. path_join(options.nvim_lint_dir, "pylint.conf"),
-        --     },
-        -- }),
     },
 })
 

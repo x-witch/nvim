@@ -8,8 +8,8 @@
 
 -- Setup lsp-config & installer
 
-local mapping = require("core.mappings")
-local icons = require("common.icons")
+local mapping = require("core.keybinds")
+local icons = require("utility.icons")
 
 -- 诊断样式定制
 local signs = icons.diagnostics

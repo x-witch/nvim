@@ -1,12 +1,19 @@
 -- https://github.com/kristijanhusak/vim-dadbod-ui
 
-local toggle_sidebar = require("core.utils")
-local options = require("core.default_config").options
-local mapping = require("core.mappings")
+local mapping = require("core.keybinds")
 
+local database_config = {
+    {
+        name = "dev",
+        url = "mysql://nrnn@192.168.0.120/db1",
+    },
+    {
+        name = "local",
+        url = "mysql://root@localhost:3306/test",
+    },
+}
 
-
-vim.g.dbs = options.database_config
+vim.g.dbs = database_config
 -- width
 vim.g.db_ui_winwidth = 30
 -- automatically execute built-in statements
@@ -20,7 +27,6 @@ mapping.register({
         lhs = "<leader>4",
         -- rhs = ":NvDBUIToggle<cr>",
         rhs = function()
-            toggle_sidebar("dbui")
             vim.cmd("DBUIToggle")
         end,
         options = { silent = true },

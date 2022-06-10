@@ -1,366 +1,428 @@
-local packer_install_tbl = {
+local fn = vim.fn
+
+-- Automatically install packer
+local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+local packer_bootstrap
+if fn.empty(fn.glob(install_path)) > 0 then
+  vim.notify("正在安装Pakcer.nvim，请稍后...")
+  packer_bootstrap = fn.system({
+    "git",
+    "clone",
+    "--depth",
+    "1",
+    "https://github.com/wbthomason/packer.nvim",
+    -- "https://gitcode.net/mirrors/wbthomason/packer.nvim",
+    install_path,
+  })
+  print("Installing packer close and reopen Neovim...")
+  vim.cmd([[packadd packer.nvim]])
+  -- https://github.com/wbthomason/packer.nvim/issues/750
+  local rtp_addition = vim.fn.stdpath("data") .. "/site/pack/*/start/*"
+  if not string.find(vim.o.runtimepath, rtp_addition) then
+    vim.o.runtimepath = rtp_addition .. "," .. vim.o.runtimepath
+  end
+  vim.notify("Pakcer.nvim 安装完毕")
+end
+
+-- Autocommand that reloads neovim whenever you save the plugins.lua file
+
+local packer_user_config = vim.api.nvim_create_augroup("packer_user_config", { clear = true })
+vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+  pattern = { "plugins.lua" },
+  callback = function()
+    vim.cmd("source <afile> | PackerSync")
+  end,
+  group = packer_user_config,
+})
+
+-- Use a protected call so we don't error out on first use
+local status_ok, packer = pcall(require, "packer")
+if not status_ok then
+  return
+end
+
+-- Have packer use a popup window
+packer.init({
+  display = {
+    open_fn = function()
+      return require("packer.util").float({ border = "rounded" })
+    end,
+  },
+})
+
+--  useage
+-- use {
+--   "myusername/example",        -- The plugin location string
+--   -- The following keys are all optional
+--   disable = boolean,           -- Mark a plugin as inactive
+--   as = string,                 -- Specifies an alias under which to install the plugin
+--   installer = function,        -- Specifies custom installer. See "custom installers" below.
+--   updater = function,          -- Specifies custom updater. See "custom installers" below.
+--   after = string or list,      -- Specifies plugins to load before this plugin. See "sequencing" below
+--   rtp = string,                -- Specifies a subdirectory of the plugin to add to runtimepath.
+--   opt = boolean,               -- Manually marks a plugin as optional.
+--   branch = string,             -- Specifies a git branch to use
+--   tag = string,                -- Specifies a git tag to use. Supports "*" for "latest tag"
+--   commit = string,             -- Specifies a git commit to use
+--   lock = boolean,              -- Skip updating this plugin in updates/syncs. Still cleans.
+--   run = string, function, or table, -- Post-update/install hook. See "update/install hooks".
+--   requires = string or list,   -- Specifies plugin dependencies. See "dependencies".
+--   rocks = string or list,      -- Specifies Luarocks dependencies for the plugin
+--   config = string or function, -- Specifies code to run after this plugin is loaded.
+--   -- The setup key implies opt = true
+--   setup = string or function,  -- Specifies code to run before this plugin is loaded.
+--   -- The following keys all imply lazy-loading and imply opt = true
+--   cmd = string or list,        -- Specifies commands which load this plugin. Can be an autocmd pattern.
+--   ft = string or list,         -- Specifies filetypes which load this plugin.
+--   keys = string or list,       -- Specifies maps which load this plugin. See "Keybindings".
+--   event = string or list,      -- Specifies autocommand events which load this plugin.
+--   fn = string or list          -- Specifies functions which load this plugin.
+--   cond = string, function, or list of strings/functions,   -- Specifies a conditional test to load this plugin
+--   module = string or list      -- Specifies Lua module names for require. When requiring a string which starts
+--                                -- with one of these module names, the plugin will be loaded.
+--   module_pattern = string/list -- Specifies Lua pattern of Lua module names for require. When
+--   requiring a string which matches one of these patterns, the plugin will be loaded.
+-- }
+
+-- Install your plugins here
+return packer.startup(function(use)
     --[[
 	=====================================
 	  ------------- basic -------------
 	=====================================
 	--]]
-    ["wbthomason/packer.nvim"] = {}, -- package manager
-    ["lewis6991/impatient.nvim"] = {}, -- speed up startup
-    ["nathom/filetype.nvim"] = {}, -- speed up startup
-    ["rcarriga/nvim-notify"] = {}, -- fancy notification message
-    --[[
-	=====================================
-	  ------------ Depend ------------
-	=====================================
-	--]]
-    ["kyazdani42/nvim-web-devicons"] = { -- neovim icons support
-        after = { "impatient.nvim" },
-    },
-    ["nvim-lua/plenary.nvim"] = { -- some module dependencies
-        after = { "impatient.nvim" },
-    },
-    ["lewis6991/gitsigns.nvim"] = { -- git commit sign
+    use("wbthomason/packer.nvim")
+    use("lewis6991/impatient.nvim") -- 插件缓存
+    use("nathom/filetype.nvim")
+    use("kyazdani42/nvim-web-devicons") -- icons
+    use("rcarriga/nvim-notify") --通知
+    use("nvim-lua/popup.nvim") -- 弹窗
+    use("nvim-lua/plenary.nvim") -- lua开发模块
+    -- 中文文档
+    use({
+        "yianwillis/vimcdoc",
         event = { "BufRead", "BufNewFile" },
-    },
+    })
+    use({
+        "lewis6991/gitsigns.nvim",
+        event = { "BufRead", "BufNewFile" },
+    })
+
     --[[
 	=====================================
 	 ------------- Theme ---------------
 	=====================================
 	--]]
-    ["askfiy/catppuccin"] = {},
-    -- ["fiqul/vscode.nvim"] = {
-    --     cond = options.colorscheme == "vscode",
-    -- },
-    -- ["projekt0n/github-nvim-theme"] = {
-    --     cond = options.colorscheme == "github-theme",
-    -- },
-    ["sainnhe/everforest"] = {},
-    ["goolord/alpha-nvim"] = {},
+    use({ "askfiy/catppuccin", })
+    -- 浅色主题
+    use({ "sainnhe/everforest" })
+    use("goolord/alpha-nvim")
+
     --[[
 	=====================================
 	 ---------- Core function ----------
 	=====================================
 	--]]
-    ["nvim-lualine/lualine.nvim"] = { -- status bar plugin
-        after = { "nvim-web-devicons", "gitsigns.nvim" },
-    },
-    ["kyazdani42/nvim-tree.lua"] = { -- file tree view
-        tag = 'nightly',
-        after = { "nvim-web-devicons" },
-        cmd = { "NvimTreeToggle", "NvimTreeFindFile" },
-    },
-    ["akinsho/bufferline.nvim"] = { -- buffer label
-        after = { "nvim-web-devicons" },
-    },
-    ["famiu/bufdelete.nvim"] = {
-        after = { "nvim-web-devicons" },
-    },
-    ["mbbill/undotree"] = { -- undo tree
-        ptp = "viml",
+    use("nvim-lualine/lualine.nvim") -- 底部状态栏
+    -- 目录大纲
+    use({
+        "kyazdani42/nvim-tree.lua",
+        after = { "nvim-web-devicons" }
+    })
+    use({
+        "akinsho/bufferline.nvim",
+        after = { "nvim-web-devicons" }
+    })
+    use("famiu/bufdelete.nvim")
+    use({
+        "folke/which-key.nvim",
         event = { "BufRead", "BufNewFile" },
-    },
-    ["folke/which-key.nvim"] = { -- keybinder
+    })
+    use({
+        "mbbill/undotree",
         event = { "BufRead", "BufNewFile" },
-    },
+    })
+
     --[[
 	=====================================
 	 ----- language server protocol ----
 	=====================================
 	--]]
-    ["neovim/nvim-lspconfig"] = { -- Basic LSP configuration support
+
+    use({
+        "neovim/nvim-lspconfig",
         after = { "impatient.nvim" },
-    },
-    ["hrsh7th/cmp-nvim-lsp"] = { -- Enhance neovim completion
+    })
+    use({
+        "hrsh7th/cmp-nvim-lsp",
         after = { "nvim-lspconfig" },
-    },
-    -- In order to keep the order of lazy loading, so this plugin is placed here
-    -- but it is not part of the LSP plugin scope
-    ["stevearc/aerial.nvim"] = { -- outline notation preview
+    })
+    use({
+        "stevearc/aerial.nvim",
         after = { "nvim-lspconfig" },
-    },
-    ["folke/lua-dev.nvim"] = { -- sumneko_lua enhancement plugin for neovim-lua development
+    })
+    use({
+        "jose-elias-alvarez/null-ls.nvim",
         after = { "nvim-lspconfig" },
-    },
-    ["jose-elias-alvarez/null-ls.nvim"] = { -- Provides third-party diagnostics, debugging, formatting, etc. for the built-in LSP
-        after = { "nvim-lspconfig" },
-    },
-    ["williamboman/nvim-lsp-installer"] = { -- automatically install LSP service
-        after = { "nvim-lspconfig", "cmp-nvim-lsp", "aerial.nvim", "lua-dev.nvim", "null-ls.nvim" },
-    },
-    ["j-hui/fidget.nvim"] = { -- prompt LSP initialization status
+    })
+    use({
+        "williamboman/nvim-lsp-installer",
+        after = { "nvim-lspconfig", "null-ls.nvim" },
+    })
+    use({
+        "j-hui/fidget.nvim",
         after = { "nvim-lsp-installer" },
-    },
-    ["kosayoda/nvim-lightbulb"] = { -- prompt a lightbulb when code behavior is available
-        after = { "nvim-lsp-installer" },
-    },
-    ["ray-x/lsp_signature.nvim"] = {},
+    })
+    use({
+        "kosayoda/nvim-lightbulb",
+        after = { "nvim-lspconfig" },
+    })
+    use({
+        "ray-x/lsp_signature.nvim"
+    })
+    use({"mfussenegger/nvim-lint"})
+    
     --[[
 	=====================================
 	 --------- Code Completion ---------
 	=====================================
 	--]]
-    ["rafamadriz/friendly-snippets"] = { -- provide rich snippet support
+    use({
+        "hrsh7th/nvim-cmp"
+    })
+    use({
+        "rafamadriz/friendly-snippets",
         event = { "InsertEnter", "CmdlineEnter" },
-    },
-    ["hrsh7th/vim-vsnip"] = { -- provide snippet support for nvim-cmp
-        ptp = "viml",
-        after = { "friendly-snippets" },
-    },
-    ["hrsh7th/nvim-cmp"] = { -- autocomplete plugin for neovim
-        after = { "vim-vsnip" },
-    },
-    ["hrsh7th/cmp-vsnip"] = { -- vsnip support for cmp
+    })
+    use({
+        "L3MON4D3/LuaSnip",
+        event = { "InsertEnter", "CmdlineEnter" },
+    })
+    use({
+        "saadparwaiz1/cmp_luasnip",
         after = { "nvim-cmp" },
-    },
-    ["hrsh7th/cmp-buffer"] = { -- provide buffer completion
+    })
+    use({
+        "hrsh7th/cmp-buffer",
         after = { "nvim-cmp" },
-    },
-    ["hrsh7th/cmp-path"] = { -- provide path completion
+    })
+    use({
+        "hrsh7th/cmp-path",
         after = { "nvim-cmp" },
-    },
-    ["hrsh7th/cmp-cmdline"] = { -- provide command line completion
+    })
+    use({
+        "hrsh7th/cmp-cmdline",
         after = { "nvim-cmp" },
-    },
-    ["kristijanhusak/vim-dadbod-completion"] = { -- complete completion for dadbod  (it may affect performance)
-        ptp = "viml",
+    })
+    use({
+        "kristijanhusak/vim-dadbod-completion",
         after = { "nvim-cmp" },
-    },
-    ["tzachar/cmp-tabnine"] = { -- AI smart completion (it may affect performance)
+    })
+    use({
+        "tzachar/cmp-tabnine",
         disable = false,
         run = "./install.sh",
         after = { "nvim-cmp" },
-    },
-    ["github/copilot.vim"] = { -- AI smart completion
+    })
+    use({
+        "github/copilot.vim",
         disable = false,
-        ptp = "viml",
-        event = { "InsertEnter" },
-    },
+        event = { "InsertEnter" }
+    })
+
     --[[
 	=====================================
 	 ----- debug adapter protocol ------
 	=====================================
 	--]]
-    ["mfussenegger/nvim-dap"] = { -- provide code debugging
+    use({
+        "mfussenegger/nvim-dap",
         module = "dap",
-    },
-    ["theHamsta/nvim-dap-virtual-text"] = { -- provide dummy text for debugging
-        after = { "nvim-dap" },
-    },
-    ["rcarriga/nvim-dap-ui"] = { -- provide UI interface for debugging
-        after = { "nvim-dap" },
-    },
+    })
+    use({
+        "theHamsta/nvim-dap-virtual-text",
+        module = "nvim-dap",
+    })
+    use({
+        "rcarriga/nvim-dap-ui",
+        module = "nvim-dap",
+    })
+
     --[[
 	=====================================
 	 ------- Database connection -------
 	=====================================
 	--]]
-    ["tpope/vim-dadbod"] = { -- core tool for linking databases
-        ptp = "viml",
+    use({
+        "tpope/vim-dadbod",
         fn = { "db#resolve" },
-    },
-    ["kristijanhusak/vim-dadbod-ui"] = { -- quick link database
-        ptp = "viml",
+    })
+    use({
+        "kristijanhusak/vim-dadbod-ui",
         cmd = "DBUIToggle",
-    },
+    })
+
     --[[
 	=====================================
 	 ----------- Code Editor -----------
 	=====================================
 	--]]
-    ["windwp/nvim-autopairs"] = { -- autocomplete parentheses
+    use({
+        "windwp/nvim-autopairs",
         event = { "InsertEnter" },
-    },
-    ["norcalli/nvim-colorizer.lua"] = { -- view code color
+    })
+    use({
+        "norcalli/nvim-colorizer.lua",
         event = { "BufReadPre", "BufNewFile" },
-    },
-    ["RRethy/vim-illuminate"] = { -- highlight the same word under the cursor
-        ptp = "viml",
-        event = { "BufRead", "BufNewFile" },
-    },
-    ["lukas-reineke/indent-blankline.nvim"] = { -- highlight indent
-        event = { "BufRead", "BufNewFile" },
-    },
-    ["nvim-treesitter/nvim-treesitter"] = { -- syntax tree plugin
-        event = { "BufRead", "BufNewFile" },
+    })
+    use({
+        "RRethy/vim-illuminate",
+        event = { "BufReadPre", "BufNewFile" },
+    })
+    use({
+        "lukas-reineke/indent-blankline.nvim",
+        event = { "BufReadPre", "BufNewFile" },
+    })
+    use({
+        "nvim-treesitter/nvim-treesitter",
         run = ":TSUpdate",
-    },
-    ["lewis6991/spellsitter.nvim"] = {
+        event = { "BufReadPre", "BufNewFile" },
+    })
+    use({
+        "lewis6991/spellsitter.nvim",
         after = { "nvim-treesitter" },
-    },
-    ["p00f/nvim-ts-rainbow"] = { -- rainbow brackets
+    })
+    use({
+        "p00f/nvim-ts-rainbow",
         after = { "nvim-treesitter" },
-    },
-    ["windwp/nvim-ts-autotag"] = { -- autocomplete tags
+    })
+    use({
+        "windwp/nvim-ts-autotag",
         after = { "nvim-treesitter" },
-    },
-    ["JoosepAlviste/nvim-ts-context-commentstring"] = { -- Provides context-based commenting behavior for Comment
+    })
+    use({
+        "JoosepAlviste/nvim-ts-context-commentstring",
         after = { "nvim-treesitter" },
-    },
-    ["numToStr/Comment.nvim"] = { -- provide code comment function
-        keys = { "gb", "gc" },
+    })
+    use({
+        "numToStr/Comment.nvim",
         after = { "nvim-ts-context-commentstring" },
-    },
-    ["tpope/vim-repeat"] = { -- repeat the modified surround operation of surround
-        ptp = "viml",
+    })
+    use({
+        "tpope/vim-repeat",
         fn = "repeat#set",
-    },
-    ["ur4ltz/surround.nvim"] = { -- modify surround
+    })
+    use({
+        "ur4ltz/surround.nvim",
         event = { "BufRead", "BufNewFile" },
-    },
-    --["folke/todo-comments.nvim"] = { -- highlight and find all TODO comments
-      --  event = { "BufRead", "BufNewFile" },
-    --},
-    ["AndrewRadev/switch.vim"] = { -- quickly switch the opposite of the word
-        ptp = "viml",
+    })
+    use({
+        "AndrewRadev/switch.vim",
         cmd = { "Switch" },
         fn = { "switch#Switch" },
-    },
-    ["Vimjas/vim-python-pep8-indent"] = { -- Python indentation rules
-        ptp = "viml",
+    })
+    use({
+        "Vimjas/vim-python-pep8-indent",
         ft = "py",
         event = { "InsertEnter" },
-    },
-    ["mattn/emmet-vim"] = { -- emmet abbreviation support
-        ptp = "viml",
+    })
+    use({
+        "mattn/emmet-vim",
         ft = { "html", "javascript", "typescript", "vue", "xml", "jsx" },
-    },
+    })
+
     --[[
 	=====================================
 	 ----------- Fuzzy lookup ----------
 	=====================================
 	--]]
-    ["nvim-telescope/telescope.nvim"] = { -- fuzzy lookup tool
+    use({
+        "nvim-telescope/telescope.nvim",
         module = "telescope",
-    },
-    ["tami5/sqlite.lua"] = { -- persistent storage history yank records
+    })
+    use({
+        "tami5/sqlite.lua",
         after = { "impatient.nvim" },
-    },
-    ["AckslD/nvim-neoclip.lua"] = { -- can be used to quickly view historical yank records
+    })
+    use({
+        "AckslD/nvim-neoclip.lua",
         after = { "sqlite.lua" },
-    },
-    ["nvim-pack/nvim-spectre"] = { -- Text replacement and retrieval tool for all items
+    })
+    use({
+        "nvim-pack/nvim-spectre",
         module = "spectre",
-    },
-    --[[
+    })
+
+     --[[
 	=====================================
 	 ------ Documentation editing ------
 	=====================================
 	--]]
-    ["phaazon/hop.nvim"] = { -- quick jump to any location
+    use({
+        "phaazon/hop.nvim",
         module = "hop",
         cmd = { "HopWord", "HopLine", "HopChar1", "HopChar1CurrentLine" },
-    },
-    ["kevinhwang91/nvim-hlslens"] = { -- Enhanced / query experience
+    })
+    use({
+        "kevinhwang91/nvim-hlslens",
         module = "hlslens",
         event = { "CmdlineEnter" },
-    },
-    ["davidgranstrom/nvim-markdown-preview"] = { -- markdown preview tool
-        ptp = "viml",
+    })
+    use({
+        "davidgranstrom/nvim-markdown-preview",
         ft = { "markdown" },
-        cmd = { "rkdownPreview" },
-    },
-    ["askfiy/nvim-picgo"] = { -- image uploader
-        module = "nvim-picgo",
-    },
-    ["mg979/vim-visual-multi"] = { -- multi-cursor mode
-        ptp = "viml",
+    })
+    use({
+        "mg979/vim-visual-multi",
         fn = { "vm#commands#add_cursor_up", "vm#commands#add_cursor_down" },
-        keys = { "<c-n>" },
-    },
-    ["jbyuki/venn.nvim"] = { -- an excellent drawing tool
+    })
+    use({
+        "jbyuki/venn.nvim",
         module = "venn",
-    },
-    ["kristijanhusak/vim-carbon-now-sh"] = { -- carbon-based code screenshot tool (requires internet connection)
-        ptp = "viml",
+    })
+    use({
+        "kristijanhusak/vim-carbon-now-sh",
         cmd = { "CarbonNowSh" },
-    },
+    })
+
     --[[
 	=====================================
 	 ---------- Other function ---------
 	=====================================
 	--]]
-    ["olimorris/persisted.nvim"] = { -- session manager
-        after = { "impatient.nvim" },
-    },
-    ["yianwillis/vimcdoc"] = { -- vim Chinese documentation
-        ptp = "viml",
-        event = { "CmdlineEnter" },
-        after = { "telescope.nvim" },
-    },
-    ["dstein64/vim-startuptime"] = { -- query startup time
-        ptp = "viml",
+    use({
+        "dstein64/vim-startuptime",
         cmd = { "StartupTime" },
-    },
-    ["ethanholz/nvim-lastplace"] = {
+    })
+    use({
+        "ethanholz/nvim-lastplace",
         event = { "BufRead" },
-    },
-    ["dstein64/nvim-scrollview"] = { -- draggable scrollbar
+    })
+    use({
+        "dstein64/nvim-scrollview",
         event = { "BufRead", "BufNewFile" },
-    },
-    ["akinsho/toggleterm.nvim"] = { -- Beautify neovim default terminal
+    })
+    use({
+        "akinsho/toggleterm.nvim",
         module = "toggleterm",
-    },
-    --["uga-rosa/translate.nvim"] = { -- an excellent translation plugin
-      --  cmd = { "Translate" },
-    --},
-    ["jghauser/mkdir.nvim"] = {
+    })
+    use({
+        "akinsho/toggleterm.nvim",
+        module = "toggleterm",
+    })
+    use({
+        "jghauser/mkdir.nvim",
         event = "CmdlineEnter",
-    },
-}
+    })
+    use({
+         "michaelb/sniprun",
+        run = "bash ./install.sh",
+    })
+    use("tpope/vim-repeat") -- .点模式增强
 
-
-fn = vim.fn
-local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
-
-packer_bootstrap = function()
-   vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#1e222a" })
-
-   if fn.empty(fn.glob(install_path)) > 0 then
-      vim.notify("Please wait ...\nInstalling packer package manager ...", "info", { title = "Packer" })
-      fn.system { "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path }
-
-      -- install plugins + compile their configs
-      vim.cmd "packadd packer.nvim"
-      vim.cmd "PackerSync"
-   end
-end
-
-local packer = require("packer")
-
-packer.init({
-   auto_clean = true,
-   compile_on_sync = true,
-   git = { clone_timeout = 6000 },
-   display = {
-      working_sym = " ﲊ",
-      error_sym = "✗ ",
-      done_sym = " ",
-      removed_sym = " ",
-      moved_sym = "",
-      open_fn = function()
-         return require("packer.util").float { border = "single" }
-      end,
-   },
-})
-
-
-packer.startup({
-    function(use)
-        for plug_name, plug_config in pairs(packer_install_tbl) do
-            local plug_options = vim.tbl_deep_extend("force", { plug_name }, plug_config)
-            use(plug_options)
-        end
-    end,
-})
-
-vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-    pattern = { "plugins.lua" },
-    callback = function()
-        vim.cmd("source <afile>")
-        vim.cmd("PackerCompile")
-        vim.pretty_print("Recompile plugins successify...")
-    end,
-    group = packer_user_config,
-})
-
-return packer
+  -- Automatically set up your configuration after cloning packer.nvim
+  -- Put this at the end after all plugins
+  if packer_bootstrap then
+    require("packer").sync()
+  end
+end)

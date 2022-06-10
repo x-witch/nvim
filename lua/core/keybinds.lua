@@ -1,15 +1,15 @@
 vim.g.mapleader = " "
 
-local mappings = {}
+local keybinds = {}
 
-mappings.register = function(group_keymap)
+keybinds.register = function(group_keymap)
     for _, key_map in pairs(group_keymap) do
         key_map.options.desc = key_map.description
         vim.keymap.set(key_map.mode, key_map.lhs, key_map.rhs, key_map.options)
     end
 end
 
-mappings.register({
+keybinds.register({
     {
         mode = { "" },
         lhs = " ",
@@ -199,4 +199,4 @@ mappings.register({
     },
 })
 
-return mappings
+return keybinds

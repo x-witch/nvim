@@ -1,6 +1,6 @@
 -- https://github.com/uga-rosa/translate.nvim
 
-local mapping = require("core.mappings")
+local mapping = require("core.keybinds")
 
 local replace_char = {
     ["u003d"] = "=",

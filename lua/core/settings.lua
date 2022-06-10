@@ -1,7 +1,7 @@
 -- There are some settings, which are automatically configured in neovim
 -- you can view it with :h vim-differences
 
-local options = {
+local settings = {
     g = {
         -- Enable Lua's ftplugin
         do_filetype_lua = 1,
@@ -13,6 +13,7 @@ local options = {
         syntax = "enable",
         -- Set background mode
         background = "dark",
+
         -- Set the character encoding used internally by nvim
         encoding = "utf-8",
         -- Set the character encoding of the file where the current buffer is located
@@ -47,6 +48,7 @@ local options = {
         termguicolors = true,
         -- Highlight the current line
         cursorline = true,
+
         -- Allow absolute line numbers
         number = true,
         -- Allow relative line numbers
@@ -56,10 +58,10 @@ local options = {
         -- Set the width of the number column, default is 4
         numberwidth = 2,
         -- Set how many lines are always displayed on the upper and lower sides of the cursor
-        scrolloff = 21,
+        scrolloff = 10,
         -- Set how many columns are always displayed to the left and right of the cursor, requires wrap = true.
         -- wrap = true,
-        -- sidescrolloff = 11,
+        sidescrolloff = 5,
         -- Allow the use of the mouse
         mouse = "a",
         -- Allow padding with special characters
@@ -98,12 +100,14 @@ local options = {
         linebreak = true,
         -- Use the system clipboard
         clipboard = "unnamedplus",
+
         -- Automatically read files modified in other editors
         autoread = true,
         -- Auto-indent, press o on the current line, the new line is always aligned with the current line
         autoindent = true,
         -- Set smart indent
         smartindent = true,
+
         -- Set allowed word separators (chains with _ are allowed in words)
         iskeyword = "@,48-57,_,-,192-255",
         -- Set options for saving sessions
@@ -136,13 +140,13 @@ local options = {
 }
 
 -- 用户自定义选项
--- vim.g.python_path = "/usr/bin/python3"
+vim.g.python_path = "/usr/bin/python3"
 -- lint 配置文件路径
--- vim.g.lint_config_dir = vim.fn.stdpath("config") .. "lint"
+vim.g.lint_config_dir = vim.fn.stdpath("config") .. "/lint"
 -- 代码片段存储路径
--- vim.g.vsnip_snippet_dir = vim.fn.stdpath("config") .. "snippets"
+ vim.g.vsnip_snippet_dir = vim.fn.stdpath("config") .. "/snippets"
 -- undotree 缓存存放路径
--- vim.g.undotree_dir = vim.fn.stdpath("cache") .. "undotree"
+vim.g.undotree_dir = vim.fn.stdpath("cache") .. "/undotree"
 
 -- vim.opt.listchars:append("space:⋅")
 -- vim.opt.listchars:append("eol:↴")
@@ -156,7 +160,7 @@ vim.opt.shortmess:append("sI")
 -- Remove auto-comments
 vim.opt.formatoptions = vim.opt.formatoptions - { "c", "r", "o" }
 
-for prefix, tbl in pairs(options) do
+for prefix, tbl in pairs(settings) do
     if prefix ~= "disable_builtin_plugins" then
         for key, value in pairs(tbl) do
             vim[prefix][key] = value
@@ -168,4 +172,17 @@ for prefix, tbl in pairs(options) do
     end
 end
 
-return options
+-- autocmds
+
+if vim.bo.fileformat == "unix" then
+    vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+        pattern = { "*" },
+        callback = function()
+            local input_status = tonumber(vim.fn.system("fcitx5-remote"))
+            if input_status == 2 then
+                vim.fn.system("fcitx5-remote -c")
+            end
+        end,
+    })
+    else
+ end

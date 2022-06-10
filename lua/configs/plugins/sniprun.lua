@@ -3,6 +3,8 @@ if not status_ok then
   return
 end
 
+mapping = require('core.keybinds')
+
 sniprun.setup({
   selected_interpreters = {}, --# use those instead of the default for the current filetype
   repl_enable = {}, --# enable REPL-like behavior for the given interpreters
@@ -56,4 +58,21 @@ sniprun.setup({
   borders = 'single', --# display borders around floating windows
   --# possible values are 'none', 'single', 'double', or 'shadow'
   live_mode_toggle = 'off' --# live mode toggle, see Usage - Running for more info
+})
+
+mapping.register({
+    {
+    mode = { "n" },
+    lhs = "<leader>rf",
+    rhs = ":%SnipRun<cr>",
+    options = { silent = true },
+    description = "sniprun"
+    },
+    {
+    mode = { "v" },
+    lhs = "<leader>rs",
+    rhs = ":%SnipRun<cr>",
+    options = { silent = true },
+    description = "sniprun"
+    },
 })

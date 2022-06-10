@@ -1,13 +1,25 @@
 -- https://github.com/AckslD/nvim-neoclip.lua
 
-local mapping = require("core.mappings")
+local mapping = require("core.keybinds")
 
 local ok, neoclip = pcall(require, "neoclip")
 if not ok then
     return
 end
 
-nvim_neoclip.setup({
+local all = function(tbl, check)
+    for _, entry in ipairs(tbl) do
+        if not check(entry) then
+            return false
+        end
+    end
+    return true
+end
+
+local is_whitespace = function(line)
+    return vim.fn.match(line, [[^\s*$]]) ~= -1
+end
+neoclip.setup({
     -- preview = false,
     -- content_spec_column = true,
     history = 1000,
@@ -36,23 +48,10 @@ nvim_neoclip.setup({
     },
     -- Filter blank lines
     filter = function(data)
-        return not all(data.event.regcontents, M.is_whitespace)
+        return not all(data.event.regcontents, is_whitespace)
     end,
 })
 
-
-function all(tbl, check)
-    for _, entry in ipairs(tbl) do
-        if not check(entry) then
-            return false
-        end
-    end
-    return true
-end
-
-function is_whitespace(line)
-    return vim.fn.match(line, [[^\s*$]]) ~= -1
-end
 
 mapping.register({
     {

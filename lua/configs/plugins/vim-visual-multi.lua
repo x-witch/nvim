@@ -1,6 +1,6 @@
 -- https://github.com/mg979/vim-visual-multi
 
-local mapping = require("core.mappings")
+local mapping = require("core.keybinds")
 
 
 vim.g.VExtend_hl = "VM_Extend_hi"

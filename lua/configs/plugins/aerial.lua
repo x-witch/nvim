@@ -4,9 +4,52 @@ if not status_ok then
   return
 end
 
-local icons = require("common.icons")
-local mapping = require("core.mappings")
+local icons = require("utility.icons")
+local mapping = require("core.keybinds")
 
+local register_buffer_key = function(bufnr)
+    mapping.register({
+        {
+            mode = { "n" },
+            lhs = "<leader>2",
+            rhs = "<cmd>AerialToggle! right<cr>",
+            options = { silent = true, buffer = bufnr },
+            description = "Open Outilne Explorer",
+        },
+        {
+
+            mode = { "n" },
+            lhs = "{",
+            rhs = "<cmd>AerialPrev<cr>",
+            options = { silent = true, buffer = bufnr },
+            description = "Move item up",
+        },
+        {
+
+            mode = { "n" },
+            lhs = "}",
+            rhs = "<cmd>AerialNext<cr>",
+            options = { silent = true, buffer = bufnr },
+            description = "Move item down",
+        },
+        {
+
+            mode = { "n" },
+            lhs = "[[",
+            rhs = "<cmd>AerialPrevUp<cr>",
+            options = { silent = true, buffer = bufnr },
+            description = "Move up one level",
+        },
+        {
+
+            mode = { "n" },
+            lhs = "]]",
+            rhs = "<cmd>AerialNextUp<cr>",
+            options = { silent = true, buffer = bufnr },
+            description = "Move down one level",
+        },
+    })
+end
 -- Call the setup function to change the default behavior
 aerial.setup({
     -- Minimum width
@@ -60,47 +103,3 @@ aerial.setup({
         update_delay = 300,
     },
 })
-
-function register_buffer_key(bufnr)
-    mapping.register({
-        {
-            mode = { "n" },
-            lhs = "<leader>2",
-            rhs = "<cmd>AerialToggle! right<cr>",
-            options = { silent = true, buffer = bufnr },
-            description = "Open Outilne Explorer",
-        },
-        {
-
-            mode = { "n" },
-            lhs = "{",
-            rhs = "<cmd>AerialPrev<cr>",
-            options = { silent = true, buffer = bufnr },
-            description = "Move item up",
-        },
-        {
-
-            mode = { "n" },
-            lhs = "}",
-            rhs = "<cmd>AerialNext<cr>",
-            options = { silent = true, buffer = bufnr },
-            description = "Move item down",
-        },
-        {
-
-            mode = { "n" },
-            lhs = "[[",
-            rhs = "<cmd>AerialPrevUp<cr>",
-            options = { silent = true, buffer = bufnr },
-            description = "Move up one level",
-        },
-        {
-
-            mode = { "n" },
-            lhs = "]]",
-            rhs = "<cmd>AerialNextUp<cr>",
-            options = { silent = true, buffer = bufnr },
-            description = "Move down one level",
-        },
-    })
-end

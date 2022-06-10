@@ -5,7 +5,7 @@ end
 
 -- https://github.com/akinsho/toggleterm.nvim
 
-local mapping = require("core.mappings")
+local mapping = require("core.keybinds")
 
 local vertical_term = nil
 local floating_term = nil

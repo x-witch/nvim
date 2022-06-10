@@ -5,17 +5,4 @@ if not status_ok then
   return
 end
 
-local opts = {
-    css = true,
-}
-
-colorizer.setup({
-    "*",
-    css = opts,
-    javascript = opts,
-    typescript = opts,
-    vue = opts,
-})
-
-vim.cmd("ColorizerReloadAllBuffers")
-
+colorizer.setup()

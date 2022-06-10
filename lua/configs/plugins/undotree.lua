@@ -1,9 +1,8 @@
 -- https://github.com/mbbill/undotree
 
-local utils = require("core.utils")
-local mapping = require("core.mappings")
+local mapping = require("core.keybinds")
 
-local undotree_dir = vim.fn.stdpath("cache") .. "undotree"
+local undotree_dir = vim.fn.stdpath("cache") .. "/undotree"
 
 
 -- style: default 1, optional: 1 2 3 4
@@ -32,7 +31,6 @@ mapping.register({
         lhs = "<leader>3",
         -- rhs = ":UndotreeToggle<cr>",
         rhs = function()
-            utils.toggle_sidebar("undotree")
             vim.cmd("UndotreeToggle")
         end,
         options = { silent = true },

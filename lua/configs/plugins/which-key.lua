@@ -19,7 +19,7 @@ end
 which_key.setup({
     plugins = {
         spelling = {
-            enabled = true,
+            enabled = false,
             suggestions = 20,
         },
     },

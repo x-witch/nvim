@@ -1,7 +1,14 @@
 -- https://github.com/AndrewRadev/switch.vim
-local str_title = require("core.utils").str_title
-local mapping = require("core.mappings")
+
 -- NOTE: switch 手动定义需要增加的反意单词
+
+local mapping = require("core.keybinds")
+
+local str_title = function(s)
+    return (s:gsub("(%a)([%w_']*)", function(f, r)
+        return f:upper() .. r:lower()
+    end))
+end
 
 local word_antisense_switch = {
     { "true", "false" },

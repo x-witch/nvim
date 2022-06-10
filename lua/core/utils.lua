@@ -1,65 +1,37 @@
 local M = {}
+local api = vim.api
 
-M.starts_with = function(str, start)
-  return str:sub(1, #start) == start
-end
+-- Create an augroup
+function M.create_augroup(autocmds, name, clear)
+    local group = api.nvim_create_augroup(name, { clear = clear })
 
-M.ends_with = function(str, ending)
-  return ending == "" or str:sub(- #ending) == ending
-end
-
-M.path_join = function(...)
-    return table.concat(vim.tbl_flatten({ ... }), "/")
-end
-
-M.str_title = function(s)
-    return (s:gsub("(%a)([%w_']*)", function(f, r)
-        return f:upper() .. r:lower()
-    end))
-end
-
-M.close_buffer = function(force)
-   if vim.bo.buftype == "terminal" then
-      vim.api.nvim_win_hide(0)
-      return
-   end
-
-   local fileExists = vim.fn.filereadable(vim.fn.expand "%p")
-   local modified = vim.api.nvim_buf_get_option(vim.fn.bufnr(), "modified")
-
-   -- if file doesnt exist & its modified
-   if fileExists == 0 and modified then
-      print "no file name? add it now!"
-      return
-   end
-
-   force = force or not vim.bo.buflisted or vim.bo.buftype == "nofile"
-
-   -- if not force, change to prev buf and then close current
-   local close_cmd = force and ":bd!" or ":bp | bd" .. vim.fn.bufnr()
-   vim.cmd(close_cmd)
-end
-
-function M.toggle_sidebar(target_ft)
-    local offset_ft = {
-        "NvimTree",
-        "undotree",
-        "dbui",
-        "spectre_panel",
-    }
-    local wins = vim.api.nvim_list_wins()
-    for _, win_id in ipairs(wins) do
-        if vim.api.nvim_win_is_valid(win_id) then
-            local buf_id = vim.api.nvim_win_get_buf(win_id)
-            local ft = vim.api.nvim_buf_get_option(buf_id, "filetype")
-            if ft ~= target_ft and vim.tbl_contains(offset_ft, ft) then
-                vim.api.nvim_win_close(win_id, true)
-            end
-        end
+    for _, autocmd in ipairs(autocmds) do
+        autocmd.opts.group = group
+        api.nvim_create_autocmd(autocmd.event, autocmd.opts)
     end
 end
 
-function M.hiset(name, opts)
+-- Create a buffer-local augroup
+function M.create_buf_augroup(bufnr, autocmds, name, clear)
+    bufnr = bufnr or 0
+
+    for _, autocmd in ipairs(autocmds) do
+        autocmd.opts.buffer = bufnr
+    end
+
+    M.create_augroup(autocmds, name, clear)
+end
+
+function M.starts_with(str, start)
+  return str:sub(1, #start) == start
+end
+
+function M.ends_with(str, ending)
+  return ending == "" or str:sub(- #ending) == ending
+end
+
+-- 高亮相关
+function M.hi_set(name, opts)
     local command = "highlight! " .. name
     for k, v in pairs(opts) do
         if k ~= "gui" then
@@ -77,7 +49,7 @@ Example:
     hi.get("Comment", "fg")
     => "#Green"
 ]]
-function M.higet(name, style)
+function M.hi_get(name, style)
     local opts = {}
     local output = vim.fn.execute("highlight " .. name)
     local lines = vim.fn.trim(output)
@@ -96,7 +68,7 @@ Example:
    hi.link("Comment", "Link")
    => nil
 ]]
-function M.hilink(definition_hi, link_hi)
+function M.hi_link(definition_hi, link_hi)
     vim.cmd("highlight link " .. definition_hi .. " " .. link_hi)
 end
 
@@ -104,7 +76,7 @@ end
 Clear preset highlights
 Defined for themes without background highlighting
 ]]
-function M.hitransparent()
+function M.hi_transparent()
     local clear_hi = {
         "Normal",
         "NormalNC",
@@ -136,5 +108,6 @@ function M.hitransparent()
         vim.cmd(string.format("hi %s ctermbg=NONE guibg=NONE", group))
     end
 end
+-- 高亮相关
 
 return M

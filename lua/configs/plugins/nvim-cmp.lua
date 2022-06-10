@@ -139,9 +139,9 @@ require("luasnip.loaders.from_vscode").lazy_load()
 require("luasnip.loaders.from_vscode").load({ paths = {
   vim.fn.stdpath("config") .. "/snippets"
 } })
-local icons = require('common.icons')
+local icons = require('utility.icons')
 
-cmp_config = {
+local cmp_config = {
   confirm_opts = {
     behavior = cmp.ConfirmBehavior.Replace,
     select = false,
@@ -157,7 +157,7 @@ cmp_config = {
   formatting = {
     fields = { "kind", "abbr", "menu" },
     max_width = 0,
-    kind_icons = icons.kind_icons,
+    kind_icons = icons.kind,
     source_names = {
       nvim_lsp = "(LSP)",
       treesitter = "(TS)",
@@ -202,18 +202,20 @@ cmp_config = {
     documentation = cmp.config.window.bordered(),
   },
   sources = {
-    { name = "vsnip" },
     { name = "nvim_lsp" },
-    { name = "path" },
     { name = "luasnip" },
-    { name = "cmp_tabnine" },
-    { name = "nvim_lua" },
+    -- { name = "vsnip" },
+    { name = "path" },
     { name = "buffer" },
-    { name = "spell" },
-    { name = "calc" },
-    { name = "emoji" },
-    { name = "treesitter" },
-    { name = "crates" },
+    { name = "cmdline" },
+    { name = "cmp_tabnine" },
+    { name = "vim-dadbod-completion" },
+    -- { name = "nvim_lua" },
+    -- { name = "spell" },
+    -- { name = "calc" },
+    -- { name = "emoji" },
+    -- { name = "treesitter" },
+    -- { name = "crates" },
   },
   mapping = cmp.mapping.preset.insert {
     ["<C-k>"] = cmp.mapping.select_prev_item(),
@@ -336,3 +338,4 @@ cmp.setup(cmp_config)
 --     return false
 --   end
 -- end
+

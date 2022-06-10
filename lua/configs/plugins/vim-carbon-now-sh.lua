@@ -1,6 +1,6 @@
 -- https://github.com/kristijanhusak/vim-carbon-now-sh
 
-local mapping = require("core.mappings")
+local mapping = require("core.keybinds")
 
 mapping.register({
     {

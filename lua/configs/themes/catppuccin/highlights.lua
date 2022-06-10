@@ -1,14 +1,13 @@
-local hi = require("core.utils")
-local options = require("core.default_config").options
+local utils = require("core.utils")
 local colors = require("catppuccin.api.colors").get_colors()
 
 local M = {
-    transparent_background = options.transparent_background,
+    transparent_background = false,
 }
 
 function M.apply_highlights(highlights)
     for name, opts in pairs(highlights) do
-        hi.hiset(name, opts)
+        utils.hi_set(name, opts)
     end
 end
 

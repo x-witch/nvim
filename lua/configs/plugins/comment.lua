@@ -4,16 +4,16 @@ local ok, comment = pcall(require, "Comment")
 if not ok then
     return
 end
-
 local comment_utils = require("Comment.utils")
+
 comment.setup({
     toggler = {
         line = "gcc",
         block = "gcb",
     },
     opleader = {
-        line = "gc",
-        block = "gb",
+        line = "gcv",
+        block = "gbv",
     },
     extra = {
         above = "gck",
