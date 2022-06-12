@@ -27,7 +27,7 @@ local settings = {
         -- Whether to create backups when writing files
         writebackup = false,
         -- Set completion options
-        completeopt = "menuone,noselect",
+        -- completeopt =  "menu, menuone, noselect",
         -- Set the width of the symbol column, if not set, it will cause an exception when displaying the icon
         signcolumn = "yes:1",
         -- Allow the window to display the edited filename
@@ -152,13 +152,13 @@ vim.g.undotree_dir = vim.fn.stdpath("cache") .. "/undotree"
 -- vim.opt.listchars:append("eol:↴")
 -- vim.opt.listchars:append("tab:↹ ")
 
-vim.opt.shortmess:append("sI") -- reduce the display of <c-g>
 -- Reduce the display of <c-g>
 vim.opt.shortmess:append("sI")
 -- Allow h and l newlines
 -- vim.opt.whichwrap:append("<>[]hl")
 -- Remove auto-comments
 vim.opt.formatoptions = vim.opt.formatoptions - { "c", "r", "o" }
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 for prefix, tbl in pairs(settings) do
     if prefix ~= "disable_builtin_plugins" then

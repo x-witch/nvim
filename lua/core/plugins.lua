@@ -196,11 +196,11 @@ return packer.startup(function(use)
         event = { "InsertEnter", "CmdlineEnter" },
     })
     use({
-        "hrsh7th/vim-vsnip",
+        "L3MON4D3/LuaSnip",
         after = { "friendly-snippets" },
     })
     use({
-        "hrsh7th/cmp-vsnip",
+        "saadparwaiz1/cmp_luasnip",
         after = { "nvim-cmp" },
     })
     use({

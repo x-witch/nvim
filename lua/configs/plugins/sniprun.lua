@@ -3,7 +3,7 @@ if not status_ok then
   return
 end
 
-mapping = require('core.keybinds')
+local mapping = require('core.keybinds')
 
 sniprun.setup({
   selected_interpreters = {}, --# use those instead of the default for the current filetype

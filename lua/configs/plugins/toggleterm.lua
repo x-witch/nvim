@@ -100,14 +100,14 @@ toggleterm.toggle_all_term = function()
     vim.cmd("ToggleTermToggleAll")
 end
 
-function open_callback()
+local function open_callback()
     -- enter insert mode
     vim.cmd("startinsert")
     -- unmap esc
     vim.keymap.del({ "t" }, "<esc>")
 end
 
-function close_callback()
+local function close_callback()
     vim.keymap.set({ "t" }, "<esc>", "<c-\\><c-n>", { silent = true })
 end
 

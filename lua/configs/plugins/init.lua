@@ -10,8 +10,10 @@ local unload_plugins = {
     "translate",
     "neoformat",
     "sniprun",
-    "hop",
     "venn",
+    "hop",
+    "vim-vsnip",
+    "spellsitter",
 }
 
 local helper_set = {}

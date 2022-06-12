@@ -33,14 +33,12 @@ local ok, dap = pcall(require, "dap")
 if not ok then
     return
 end
-
 -- Load adapter configuration file
 local dubug_adapter_config = {
     -- go = require("configs.dap.go"),
     python = require("configs.dap.python"),
     -- dotnet = require("configs.dap.dotnet"),
 }
-
 
 for _, dap_config in pairs(dubug_adapter_config) do
     dap.adapters = vim.tbl_deep_extend("force", dap.adapters, dap_config.adapters)
