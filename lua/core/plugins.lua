@@ -248,8 +248,8 @@ return packer.startup(function(use)
     })
     use({
         "rcarriga/nvim-dap-ui",
-        -- module = "dap",
-        after = { "nvim-dap" },
+        module = "dap",
+        -- after = { "nvim-dap" },
     })
 
     --[[
