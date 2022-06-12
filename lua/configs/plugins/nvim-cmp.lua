@@ -160,11 +160,11 @@ cmp.setup.cmdline(':', {
 })
 
 -- load freindly-snippets
--- require("luasnip.loaders.from_vscode").lazy_load()
+require("luasnip.loaders.from_vscode").lazy_load()
 -- Load snippets from user custom snippets folder
--- require("luasnip.loaders.from_vscode").load({ paths = {
---     vim.fn.stdpath("config") .. "/snippets"
--- } })
+require("luasnip.loaders.from_vscode").load({ paths = {
+    vim.fn.stdpath("config") .. "/snippets"
+} })
 
 -- " gray
 -- highlight! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080
