@@ -182,7 +182,7 @@ return packer.startup(function(use)
         "ray-x/lsp_signature.nvim"
     })
     use({"mfussenegger/nvim-lint"})
-    
+
     --[[
 	=====================================
 	 --------- Code Completion ---------
@@ -240,12 +240,15 @@ return packer.startup(function(use)
         "mfussenegger/nvim-dap",
         module = "dap",
     })
+    use( "ravenxrz/DAPInstall.nvim" )
     use({
         "theHamsta/nvim-dap-virtual-text",
+        -- module = "dap",
         after = { "nvim-dap" },
     })
     use({
         "rcarriga/nvim-dap-ui",
+        -- module = "dap",
         after = { "nvim-dap" },
     })
 

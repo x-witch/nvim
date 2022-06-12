@@ -10,7 +10,6 @@ treesitter.setup({
     -- 安装的高亮支持来源，安装language parser,:TSInstallInfo查看
     ensure_installed = { "c", "vim", "lua", "python", "json", },
     ignore_install = { "" },
-    -- 同步下载高亮支持
     sync_install = false,
     -- 高亮相关
     highlight = {

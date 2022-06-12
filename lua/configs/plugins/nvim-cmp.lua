@@ -12,12 +12,6 @@ end
 
 -- local icons = require('utility.icons')
 
--- load freindly-snippets
-require("luasnip.loaders.from_vscode").lazy_load()
--- Load snippets from user custom snippets folder
-require("luasnip.loaders.from_vscode").load({ paths = {
-    vim.fn.stdpath("config") .. "/snippets"
-} })
 
 local kind_icons = {
     Text = "",
@@ -47,6 +41,12 @@ local kind_icons = {
     TypeParameter = ""
 }
 
+
+local has_words_before = function()
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
 cmp.setup {
     snippet = {
         expand = function(args)
@@ -67,16 +67,20 @@ cmp.setup {
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
         },
-        ['<Tab>'] = cmp.mapping(function(fallback)
+
+        ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
             elseif luasnip.expand_or_jumpable() then
                 luasnip.expand_or_jump()
+            elseif has_words_before() then
+                cmp.complete()
             else
                 fallback()
             end
-        end, { 'i', 's' }),
-        ['<S-Tab>'] = cmp.mapping(function(fallback)
+        end, { "i", "s" }),
+
+        ["<S-Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_prev_item()
             elseif luasnip.jumpable(-1) then
@@ -84,7 +88,8 @@ cmp.setup {
             else
                 fallback()
             end
-        end, { 'i', 's' }),
+        end, { "i", "s" }),
+
     }),
     sources = cmp.config.sources({
         { name = 'nvim_lsp' },
@@ -101,9 +106,12 @@ cmp.setup {
             vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
             -- Source
             vim_item.menu = ({
-                buffer = "[Buffer]",
                 nvim_lsp = "[LSP]",
                 luasnip = "[LuaSnip]",
+                buffer = "[Buffer]",
+                path = "[Path]",
+                cmp_tabnine = "[Tabnine]",
+                treesitter = "[TS]",
                 -- nvim_lua = "[Lua]",
                 -- latex_symbols = "[LaTeX]",
             })[entry.source.name]
@@ -150,6 +158,14 @@ cmp.setup.cmdline(':', {
         { name = 'path' }
     })
 })
+
+-- load freindly-snippets
+-- require("luasnip.loaders.from_vscode").lazy_load()
+-- Load snippets from user custom snippets folder
+-- require("luasnip.loaders.from_vscode").load({ paths = {
+--     vim.fn.stdpath("config") .. "/snippets"
+-- } })
+
 -- " gray
 -- highlight! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080
 -- " blue

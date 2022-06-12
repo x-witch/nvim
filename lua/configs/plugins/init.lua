@@ -14,6 +14,8 @@ local unload_plugins = {
     "hop",
     "vim-vsnip",
     "spellsitter",
+    "nvim-dap-ui",
+    "persisted",
 }
 
 local helper_set = {}

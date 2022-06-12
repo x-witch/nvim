@@ -11,5 +11,4 @@ nvim_lastposition.setup({
     -- 不记录光标位置的文件类型
     lastplace_ignore_filetype = {"gitcommit", "gitrebase", "svn", "hgcommit"},
     lastplace_open_folds = true
-  }
-)
+})
