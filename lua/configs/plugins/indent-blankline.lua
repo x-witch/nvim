@@ -4,14 +4,25 @@ if not status_ok then
 	return
 end
 
-vim.g.indent_blankline_buftype_exclude = { "terminal", "nofile" }
+-- vim.g.indent_blankline_buftype_exclude = { "terminal", "nofile" }
 vim.g.indent_blankline_filetype_exclude = {
     "help",
 	"startify",
 	"dashboard",
 	"packer",
 	"neogitstatus",
-	"NvimTree",
+    "NvimTree",
+    "aerial",
+    "undotree",
+    "spectre_panel",
+    "dbui",
+    "toggleterm",
+    "notify",
+    "lsp-installer",
+    "help",
+    "terminal",
+    "lspinfo",
+    "",
 }
 vim.g.indentLine_enabled = 1
 -- vim.g.indent_blankline_char = "│"
