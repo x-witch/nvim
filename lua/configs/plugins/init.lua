@@ -1,5 +1,5 @@
 local function ends_with(str, ending)
-  return ending == "" or str:sub(- #ending) == ending
+    return ending == "" or str:sub(- #ending) == ending
 end
 
 local config_dir = vim.fn.stdpath('config') .. '/lua/configs/plugins'
@@ -14,8 +14,8 @@ local unload_plugins = {
     "hop",
     "vim-vsnip",
     "spellsitter",
-    "nvim-dap-ui",
     "persisted",
+    "spectre",
 }
 
 local helper_set = {}
@@ -29,10 +29,9 @@ for _, fname in pairs(vim.fn.readdir(config_dir)) do
         if helper_set[cut_suffix_fname] == nil then
             local file = "configs.plugins." .. cut_suffix_fname
             local status_ok, _ = pcall(require, file)
-                if not status_ok then
-                    vim.notify('Failed loading ' .. fname, vim.log.levels.ERROR)
-                end
-         end
+            if not status_ok then
+                vim.notify('Failed loading ' .. fname)
+            end
+        end
     end
 end
-

@@ -18,24 +18,17 @@
 --     dap.configurations[dap_name] = dap_options.configurations
 -- end
 
-local keymaps = require("core.keybinds")
 
 local M = {}
 
-local ok, dap = pcall(require, "dap")
-if not ok then
-    return
-end
+local mapping = require("core.keybinds")
 
-local dapui = require("dapui")
-
-local dap_install = require("dap-install")
-
-function M.config_dapi_and_sign()
+local function config_dapi_and_sign()
+    local dap_install = require "dap-install"
     dap_install.setup {
         installation_path = vim.fn.stdpath "data" .. "/dapinstall/",
     }
-    -- 设置断点样式
+
     local dap_breakpoint = {
         error = {
             text = "🛑",
@@ -62,7 +55,8 @@ function M.config_dapi_and_sign()
     vim.fn.sign_define("DapBreakpointRejected", dap_breakpoint.rejected)
 end
 
-function M.config_dapui()
+local function config_dapui()
+    local dap, dapui = require "dap", require "dapui"
 
     local debug_open = function()
         dapui.open()
@@ -72,7 +66,7 @@ function M.config_dapui()
         dap.repl.close()
         dapui.close()
         vim.api.nvim_command("DapVirtualTextDisable")
-        vim.api.nvim_command("bdelete! term:") -- close debug temrinal
+        -- vim.api.nvim_command("bdelete! term:")   -- close debug temrinal
     end
 
     dap.listeners.after.event_initialized["dapui_config"] = function()
@@ -89,21 +83,27 @@ function M.config_dapui()
     end
 end
 
-function M.config_debuggers()
+local function config_debuggers()
+    local dap = require "dap"
     -- TODO: wait dap-ui for fixing temrinal layout
     -- the "30" of "30vsplit: doesn't work
     dap.defaults.fallback.terminal_win_cmd = '30vsplit new' -- this will be overrided by dapui
     dap.set_log_level("DEBUG")
 
     -- load from json file
-    require('dap.ext.vscode').load_launchjs(nil, { cppdbg = { 'cpp' } })
+    -- require('dap.ext.vscode').load_launchjs(nil, { cppdbg = { 'cpp' } })
+    -- config per launage
+
+    require("configs.dap.go")
     require("configs.dap.python")
-    -- require("configs.dap.python").setup()
-    -- require("configs.dap.rust").setup()
-    -- require("configs.dap.go").setup()
+    require("configs.dap.lua")
+    -- require("user.dap.dap-cpp")
+    -- require("config.dap.python").setup()
+    -- require("config.dap.rust").setup()
+    -- require("config.dap.go").setup()
 end
 
-keymaps.register({
+mapping.register({
     {
         mode = { "n" },
         lhs = "<leader>du",

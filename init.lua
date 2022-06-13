@@ -10,5 +10,5 @@ require("core.keybinds")
 require("core.plugins")
 require("core.utils")
 require("configs.plugins")
-
+require("core.auto-cmds")
 

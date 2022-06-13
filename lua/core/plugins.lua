@@ -4,50 +4,50 @@ local fn = vim.fn
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 local packer_bootstrap
 if fn.empty(fn.glob(install_path)) > 0 then
-  vim.notify("正在安装Pakcer.nvim，请稍后...")
-  packer_bootstrap = fn.system({
-    "git",
-    "clone",
-    "--depth",
-    "1",
-    "https://github.com/wbthomason/packer.nvim",
-    -- "https://gitcode.net/mirrors/wbthomason/packer.nvim",
-    install_path,
-  })
-  print("Installing packer close and reopen Neovim...")
-  vim.cmd([[packadd packer.nvim]])
-  -- https://github.com/wbthomason/packer.nvim/issues/750
-  local rtp_addition = vim.fn.stdpath("data") .. "/site/pack/*/start/*"
-  if not string.find(vim.o.runtimepath, rtp_addition) then
-    vim.o.runtimepath = rtp_addition .. "," .. vim.o.runtimepath
-  end
-  vim.notify("Pakcer.nvim 安装完毕")
+    vim.notify("正在安装Pakcer.nvim，请稍后...")
+    packer_bootstrap = fn.system({
+        "git",
+        "clone",
+        "--depth",
+        "1",
+        "https://github.com/wbthomason/packer.nvim",
+        -- "https://gitcode.net/mirrors/wbthomason/packer.nvim",
+        install_path,
+    })
+    print("Installing packer close and reopen Neovim...")
+    vim.cmd([[packadd packer.nvim]])
+    -- https://github.com/wbthomason/packer.nvim/issues/750
+    -- local rtp_addition = vim.fn.stdpath("data") .. "/site/pack/*/start/*"
+    -- if not string.find(vim.o.runtimepath, rtp_addition) then
+    --     vim.o.runtimepath = rtp_addition .. "," .. vim.o.runtimepath
+    -- end
+    vim.notify("Pakcer.nvim 安装完毕")
 end
 
 -- Autocommand that reloads neovim whenever you save the plugins.lua file
 
 local packer_user_config = vim.api.nvim_create_augroup("packer_user_config", { clear = true })
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-  pattern = { "plugins.lua" },
-  callback = function()
-    vim.cmd("source <afile> | PackerSync")
-  end,
-  group = packer_user_config,
+    pattern = { "plugins.lua" },
+    callback = function()
+        vim.cmd("source <afile> | PackerSync")
+    end,
+    group = packer_user_config,
 })
 
 -- Use a protected call so we don't error out on first use
 local status_ok, packer = pcall(require, "packer")
 if not status_ok then
-  return
+    return
 end
 
 -- Have packer use a popup window
 packer.init({
-  display = {
-    open_fn = function()
-      return require("packer.util").float({ border = "rounded" })
-    end,
-  },
+    display = {
+        open_fn = function()
+            return require("packer.util").float({ border = "rounded" })
+        end,
+    },
 })
 
 --  useage
@@ -181,7 +181,7 @@ return packer.startup(function(use)
     use({
         "ray-x/lsp_signature.nvim"
     })
-    use({"mfussenegger/nvim-lint"})
+    use({ "mfussenegger/nvim-lint" })
 
     --[[
 	=====================================
@@ -240,16 +240,17 @@ return packer.startup(function(use)
         "mfussenegger/nvim-dap",
         module = "dap",
     })
-    use( "ravenxrz/DAPInstall.nvim" )
+    use({
+        "ravenxrz/DAPInstall.nvim",
+        after = { "nvim-dap" },
+    })
     use({
         "theHamsta/nvim-dap-virtual-text",
-        -- module = "dap",
         after = { "nvim-dap" },
     })
     use({
         "rcarriga/nvim-dap-ui",
-        module = "dap",
-        -- after = { "nvim-dap" },
+        after = { "nvim-dap" },
     })
 
     --[[
@@ -281,21 +282,21 @@ return packer.startup(function(use)
     })
     use({
         "RRethy/vim-illuminate",
-        event = { "BufReadPre", "BufNewFile" },
+        event = { "BufRead", "BufNewFile" },
     })
     use({
         "lukas-reineke/indent-blankline.nvim",
-        event = { "BufReadPre", "BufNewFile" },
+        event = { "BufRead", "BufNewFile" },
     })
     use({
         "nvim-treesitter/nvim-treesitter",
         run = ":TSUpdate",
-        event = { "BufReadPre", "BufNewFile" },
+        event = { "BufRead", "BufNewFile" },
     })
-    use({
-        "lewis6991/spellsitter.nvim",
-        after = { "nvim-treesitter" },
-    })
+    -- use({
+    --     "lewis6991/spellsitter.nvim",
+    --     after = { "nvim-treesitter" },
+    -- })
     use({
         "p00f/nvim-ts-rainbow",
         after = { "nvim-treesitter" },
@@ -352,18 +353,19 @@ return packer.startup(function(use)
         "AckslD/nvim-neoclip.lua",
         after = { "sqlite.lua" },
     })
-    use({
-        "nvim-pack/nvim-spectre",
-        module = "spectre",
-    })
+    -- use({
+    --     "nvim-pack/nvim-spectre",
+    --     module = "spectre",
+    -- })
 
-     --[[
+    --[[
 	=====================================
 	 ------ Documentation editing ------
 	=====================================
 	--]]
     -- use({
     --     "phaazon/hop.nvim",
+            -- branch = "v1",
     --     module = "hop",
     --     cmd = { "HopWord", "HopLine", "HopChar1", "HopChar1CurrentLine" },
     -- })
@@ -398,6 +400,10 @@ return packer.startup(function(use)
         "dstein64/vim-startuptime",
         cmd = { "StartupTime" },
     })
+    -- use({
+    --     "olimorris/persisted.nvim",
+    --     after = { "impatient.nvim" },
+    -- })
     use({
         "ethanholz/nvim-lastplace",
         event = { "BufRead" },
@@ -419,13 +425,13 @@ return packer.startup(function(use)
         event = "CmdlineEnter",
     })
     use({
-         "michaelb/sniprun",
+        "michaelb/sniprun",
         run = "bash ./install.sh",
     })
 
-  -- Automatically set up your configuration after cloning packer.nvim
-  -- Put this at the end after all plugins
-  if packer_bootstrap then
-    require("packer").sync()
-  end
+    -- Automatically set up your configuration after cloning packer.nvim
+    -- Put this at the end after all plugins
+    if packer_bootstrap then
+        require("packer").sync()
+    end
 end)
