@@ -192,7 +192,10 @@ return packer.startup(function(use)
     use({
         "ray-x/lsp_signature.nvim"
     })
-    use({ "mfussenegger/nvim-lint" })
+    use({
+        "mfussenegger/nvim-lint",
+        event = { "BufRead", "BufNewFile" },
+    })
 
     --[[
 	=====================================
@@ -438,6 +441,7 @@ return packer.startup(function(use)
     use({
         "michaelb/sniprun",
         run = "bash ./install.sh",
+        event = { "BufRead", "BufNewFile" },
     })
 
     -- Automatically set up your configuration after cloning packer.nvim
