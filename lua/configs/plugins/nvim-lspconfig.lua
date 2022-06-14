@@ -50,7 +50,7 @@ function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
 end
 
 -- 配置 nvim-lsp-installer，它只负责下载 LSP 服务器
-local nvim_lsp_installer = require("nvim-lsp-installer")
+local install_status_ok, nvim_lsp_installer = pcall(require, 'nvim-lsp-installer')
 nvim_lsp_installer.setup({
     -- A list of servers to automatically install if they're not already installed
     ensure_installed = { "sumneko_lua", "pyright", "jsonls" },
@@ -60,6 +60,10 @@ nvim_lsp_installer.setup({
     --   -- 针对中国用户，如果 LSP 服务器下载太慢，可以使用下面的镜像站
     --   -- download_url_template = "https://hub.fastgit.xyz/%s/releases/download/%s/%s",
     --   download_url_template = "https://github.com/%s/releases/download/%s/%s",
+    -- },
+    -- install_root_dir = vim.fn.stdpath('data') .. '/lsp_servers',
+    -- pip = {
+    --     install_args = {},
     -- },
     -- max_concurrent_installers = 20,
 })

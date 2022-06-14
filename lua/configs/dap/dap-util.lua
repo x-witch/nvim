@@ -86,8 +86,10 @@ function M.store_breakpoints()
     -- write bps into json file
     local json_str = vim.fn.json_encode(bps)
     if json_str ~= nil then
+---@diagnostic disable-next-line: need-check-nil
         fp:write(json_str)
     end
+---@diagnostic disable-next-line: need-check-nil
     fp:close()
 end
 

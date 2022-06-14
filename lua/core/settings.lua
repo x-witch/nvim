@@ -2,12 +2,12 @@
 -- you can view it with :h vim-differences
 
 local settings = {
-    g = {
-        -- Enable Lua's ftplugin
-        do_filetype_lua = 1,
-        -- Do not disable ftplugin
-        did_load_filetypes = 0,
-    },
+    -- g = {
+    --     -- Enable Lua's ftplugin
+    --     do_filetype_lua = 1,
+    --     -- Do not disable ftplugin
+    --     did_load_filetypes = 0,
+    -- },
     opt = {
         -- Turn on syntax highlighting
         syntax = "enable",
@@ -116,7 +116,12 @@ local settings = {
         laststatus = 3,
         -- After turning on the global status bar, we should set a more obvious separator
         fillchars = "vert:┃,horiz:━,verthoriz:╋,horizup:┻,horizdown:┳,vertleft:┫,vertright:┣",
+        completeopt = 'menuone,noselect,noinsert',
+
+        -- listchars = 'space:⋅,tab:→ ,eol:¬,nbsp:⣿,extends:»,precedes:«,trail:·' -- space:␣
+        -- listchars = 'tab:→ ,eol:¬,nbsp:⣿,extends:»,precedes:«,trail:·' -- space:␣
     },
+    -- 取消一些内置插件
     disable_builtin_plugins = {
         -- "netrw",
         -- "netrwPlugin",
@@ -139,26 +144,13 @@ local settings = {
     },
 }
 
--- 用户自定义选项
-vim.g.python_path = "/usr/bin/python3"
--- lint 配置文件路径
-vim.g.lint_config_dir = vim.fn.stdpath("config") .. "/lint"
--- 代码片段存储路径
-vim.g.vsnip_snippet_dir = vim.fn.stdpath("config") .. "/snippets"
--- undotree 缓存存放路径
-vim.g.undotree_dir = vim.fn.stdpath("cache") .. "/undotree"
-
--- vim.opt.listchars:append("space:⋅")
--- vim.opt.listchars:append("eol:↴")
--- vim.opt.listchars:append("tab:↹ ")
-
 -- Reduce the display of <c-g>
 vim.opt.shortmess:append("sI")
 -- Allow h and l newlines
 -- vim.opt.whichwrap:append("<>[]hl")
 -- Remove auto-comments
 vim.opt.formatoptions = vim.opt.formatoptions - { "c", "r", "o" }
-vim.opt.completeopt = { "menu", "menuone", "noselect" }
+-- vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 for prefix, tbl in pairs(settings) do
     if prefix ~= "disable_builtin_plugins" then
@@ -171,3 +163,18 @@ for prefix, tbl in pairs(settings) do
         end
     end
 end
+
+
+if vim.bo.fileformat == "unix" then
+    vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+        pattern = { "*" },
+        callback = function()
+            local input_status = tonumber(vim.fn.system("fcitx5-remote"))
+            if input_status == 2 then
+                vim.fn.system("fcitx5-remote -c")
+            end
+        end,
+    })
+    else
+ end
+

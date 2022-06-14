@@ -10,10 +10,14 @@ local mapping = require("core.keybinds")
 
 bufferline.setup({
     options = {
+        -- mode = 'tabs',
         -- Allow user to override highlight group
         themable = true,
         -- "none" | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
-        numbers = "ordinal",
+        -- numbers = "ordinal",
+        numbers = function(opts)
+            return string.format('%s·%s', opts.raise(opts.id), opts.lower(opts.ordinal))
+        end,
         -- The currently selected buffer style
         indicator_icon = "▎",
         -- It is not recommended to modify the icons below
@@ -76,6 +80,11 @@ bufferline.setup({
                 text_align = "center",
             },
         },
+        color_icons = true,
+        show_buffer_icons = true,
+        show_buffer_default_icon = true,
+        show_close_icon = true,
+        show_tab_indicators = true,
     },
 })
 

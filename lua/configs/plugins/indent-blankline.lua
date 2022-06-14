@@ -4,38 +4,13 @@ if not status_ok then
 	return
 end
 
--- vim.g.indent_blankline_buftype_exclude = { "terminal", "nofile" }
-vim.g.indent_blankline_filetype_exclude = {
-    "help",
-	"startify",
-	"dashboard",
-	"packer",
-	"neogitstatus",
-    "NvimTree",
-    "aerial",
-    "undotree",
-    "spectre_panel",
-    "dbui",
-    "toggleterm",
-    "notify",
-    "lsp-installer",
-    "help",
-    "terminal",
-    "lspinfo",
-    "",
-}
 vim.g.indentLine_enabled = 1
--- vim.g.indent_blankline_char = "│"
 vim.g.indent_blankline_char = "▏"
+-- vim.g.indent_blankline_char = "│"
 -- vim.g.indent_blankline_char = "▎"
 vim.g.indent_blankline_show_trailing_blankline_indent = false
 vim.g.indent_blankline_show_first_indent_level = true
 vim.g.indent_blankline_use_treesitter = true
-vim.g.indent_blankline_show_current_context = true
--- vim.opt.list = true
--- vim.opt.listchars:append "space:⋅"
--- vim.opt.listchars:append "space:"
--- vim.opt.listchars:append "eol:↴"
 
 
 vim.opt.termguicolors = true
@@ -46,11 +21,9 @@ vim.cmd [[highlight IndentBlanklineIndent4 guifg=#56B6C2 gui=nocombine]]
 vim.cmd [[highlight IndentBlanklineIndent5 guifg=#61AFEF gui=nocombine]]
 vim.cmd [[highlight IndentBlanklineIndent6 guifg=#C678DD gui=nocombine]]
 
-indent_blankline.setup {
-    show_current_context_start = false,
-    show_current_context = true,
-    show_end_of_line = true,
-    -- space_char_blankline = " ",
+
+indent_blankline.setup({
+    space_char_blankline = " ",
     char_highlight_list = {
         "IndentBlanklineIndent1",
         "IndentBlanklineIndent2",
@@ -59,4 +32,43 @@ indent_blankline.setup {
         "IndentBlanklineIndent5",
         "IndentBlanklineIndent6",
     },
-}
+    show_current_context = true,
+    show_current_context_start = false,
+    show_end_of_line = true,
+    buftype_exclude = { "terminal", "nofile" },
+    filetype_exclude = {
+        "startify",
+        "dashboard",
+        "dotooagenda",
+        "log",
+        "fugitive",
+        "gitcommit",
+        "packer",
+        "vimwiki",
+        "markdown",
+        "txt",
+        "vista",
+        "help",
+        "todoist",
+        "NvimTree",
+        "peekaboo",
+        "git",
+        "TelescopePrompt",
+        "undotree",
+        "flutterToolsOutline",
+        "", -- for all buffers without a file type
+    },
+    context_patterns = {
+        "class",
+        "function",
+        "method",
+        "block",
+        "list_literal",
+        "selector",
+        "^if",
+        "^table",
+        "if_statement",
+        "while",
+        "for",
+    },
+})

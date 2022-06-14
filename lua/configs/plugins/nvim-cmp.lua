@@ -1,46 +1,25 @@
-local status_cmp_ok, cmp = pcall(require, "cmp")
-
-if not status_cmp_ok then
+local cmp_status_ok, cmp = pcall(require, 'cmp')
+if not cmp_status_ok then
+    vim.notify('cmp not found')
     return
 end
 
-local status_luasnip_ok, luasnip = pcall(require, "luasnip")
-
-if not status_luasnip_ok then
+local luasnip_status_ok, luasnip = pcall(require, 'luasnip')
+if not luasnip_status_ok then
+    vim.notify('luasnip not found')
     return
 end
 
--- local icons = require('utility.icons')
 
+-- require("luasnip.loaders.from_snipmate").lazy_load()
+-- load freindly-snippets
+require("luasnip.loaders.from_vscode").lazy_load()
+-- Load snippets from user custom snippets folder
+require("luasnip.loaders.from_vscode").load({ paths = {
+    vim.fn.stdpath("config") .. "/snippets"
+} })
 
-local kind_icons = {
-    Text = "",
-    Method = "",
-    Function = "",
-    Constructor = "",
-    Field = "",
-    Variable = "",
-    Class = "ﴯ",
-    Interface = "",
-    Module = "",
-    Property = "ﰠ",
-    Unit = "",
-    Value = "",
-    Enum = "",
-    Keyword = "",
-    Snippet = "",
-    Color = "",
-    File = "",
-    Reference = "",
-    Folder = "",
-    EnumMember = "",
-    Constant = "",
-    Struct = "",
-    Event = "",
-    Operator = "",
-    TypeParameter = ""
-}
-
+local kind_icons = require('utility.icons').kind
 
 local has_words_before = function()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -65,7 +44,7 @@ cmp.setup {
         ["<C-e>"] = cmp.mapping.abort(),
         ['<CR>'] = cmp.mapping.confirm {
             behavior = cmp.ConfirmBehavior.Replace,
-            select = true,
+            select = false,
         },
 
         ["<Tab>"] = cmp.mapping(function(fallback)
@@ -94,16 +73,24 @@ cmp.setup {
     sources = cmp.config.sources({
         { name = 'nvim_lsp' },
         { name = 'luasnip' },
-        { name = "path" },
         { name = "buffer" },
+        { name = "path" },
         { name = "cmdline" },
         { name = "cmp_tabnine" },
         { name = "vim-dadbod-completion" },
     }),
     formatting = {
+        fields = { 'kind', 'abbr', 'menu' },
+        max_width = 0,
         format = function(entry, vim_item)
+            local max_len = 35 -- 限制提示框的宽度
+            if string.len(vim_item.abbr) > max_len then
+                vim_item.abbr = string.sub(vim_item.abbr, 1, max_len - 2) .. "···"
+            else
+                vim_item.abbr = string.format('%-' .. max_len .. 's', vim_item.abbr)
+            end
             -- Kind icons
-            vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
+            vim_item.kind = string.format('%s', kind_icons[vim_item.kind] ) -- This concatonates the icons with the name of the item kind
             -- Source
             vim_item.menu = ({
                 nvim_lsp = "[LSP]",
@@ -112,26 +99,39 @@ cmp.setup {
                 path = "[Path]",
                 cmp_tabnine = "[Tabnine]",
                 treesitter = "[TS]",
+                -- copilot = '[Copilot]'
                 -- nvim_lua = "[Lua]",
                 -- latex_symbols = "[LaTeX]",
             })[entry.source.name]
             return vim_item
         end
     },
-    sorting = {
-        comparators = {
-            cmp.config.compare.length,
-            cmp.config.compare.offset,
-            cmp.config.compare.exact,
-            cmp.config.compare.scopes,
-            cmp.config.compare.score,
-            cmp.config.compare.recently_used,
-            cmp.config.compare.locality,
-            cmp.config.compare.kind,
-            cmp.config.compare.sort_text,
-            cmp.config.compare.order,
+    view = {
+        entries = {
+            -- can be "custom", "wildmenu" or "native"
+            name = 'custom',
+            -- 在底部的时候，提示内容从下到上
+            -- selection_order = 'near_cursor',
         },
     },
+    experimental = {
+        ghost_text = false,
+        native_menu = false,
+    },
+    -- sorting = {
+    --     comparators = {
+    --         cmp.config.compare.length,
+    --         cmp.config.compare.offset,
+    --         cmp.config.compare.exact,
+    --         cmp.config.compare.scopes,
+    --         cmp.config.compare.score,
+    --         cmp.config.compare.recently_used,
+    --         cmp.config.compare.locality,
+    --         cmp.config.compare.kind,
+    --         cmp.config.compare.sort_text,
+    --         cmp.config.compare.order,
+    --     },
+    -- },
 }
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
@@ -159,12 +159,6 @@ cmp.setup.cmdline(':', {
     })
 })
 
--- load freindly-snippets
-require("luasnip.loaders.from_vscode").lazy_load()
--- Load snippets from user custom snippets folder
-require("luasnip.loaders.from_vscode").load({ paths = {
-    vim.fn.stdpath("config") .. "/snippets"
-} })
 
 -- " gray
 -- highlight! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080

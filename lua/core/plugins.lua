@@ -127,6 +127,8 @@ return packer.startup(function(use)
     use({ "askfiy/catppuccin", })
     -- 浅色主题
     use({ "sainnhe/everforest" })
+    use("sainnhe/edge")
+    -- 欢迎页面
     use("goolord/alpha-nvim")
 
     --[[
@@ -153,6 +155,10 @@ return packer.startup(function(use)
     use({
         "mbbill/undotree",
         event = { "BufRead", "BufNewFile" },
+    })
+    use({
+        'fgheng/winbar.nvim',
+        event = { 'InsertEnter', 'CursorMoved' },
     })
 
     --[[
@@ -211,7 +217,7 @@ return packer.startup(function(use)
     })
     use({
         "L3MON4D3/LuaSnip",
-        after = { "friendly-snippets" },
+        module = { 'luasnip', 'LuaSnip' },
     })
     use({
         "saadparwaiz1/cmp_luasnip",
@@ -244,6 +250,10 @@ return packer.startup(function(use)
         disable = false,
         event = { "InsertEnter" }
     })
+    -- use({
+    --     'hrsh7th/cmp-nvim-lsp-signature-help',
+    --     after = 'nvim-cmp'
+    -- })
 
     --[[
 	=====================================
@@ -255,17 +265,18 @@ return packer.startup(function(use)
         module = "dap",
     })
     use({
-        "ravenxrz/DAPInstall.nvim",
+        "rcarriga/nvim-dap-ui",
         after = { "nvim-dap" },
     })
+    -- use({
+    --     "ravenxrz/DAPInstall.nvim",
+    --     after = { "nvim-dap" },
+    -- })
     use({
         "theHamsta/nvim-dap-virtual-text",
         after = { "nvim-dap" },
     })
-    use({
-        "rcarriga/nvim-dap-ui",
-        after = { "nvim-dap" },
-    })
+    -- use "mfussenegger/nvim-dap-python"
 
     --[[
 	=====================================
@@ -305,7 +316,8 @@ return packer.startup(function(use)
     use({
         "nvim-treesitter/nvim-treesitter",
         run = ":TSUpdate",
-        event = { "BufRead", "BufNewFile" },
+        -- event = { "BufRead", "BufNewFile" },
+        event = { 'InsertEnter', 'CursorMoved', 'WinScrolled' },
     })
     -- use({
     --     "lewis6991/spellsitter.nvim",
@@ -379,7 +391,7 @@ return packer.startup(function(use)
 	--]]
     -- use({
     --     "phaazon/hop.nvim",
-            -- branch = "v1",
+    -- branch = "v1",
     --     module = "hop",
     --     cmd = { "HopWord", "HopLine", "HopChar1", "HopChar1CurrentLine" },
     -- })
