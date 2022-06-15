@@ -1,28 +1,57 @@
--- https://github.com/L3MON4D3/LuaSnip
 
-local mapping = require("core.keybinds")
+local path_join = function(...)
+    return table.concat(vim.tbl_flatten({ ... }), "/")
+end
 
-vim.g.vsnip_snippet_dir = vim.fn.stdpath("config") .. "/snippets"
-vim.g.vsnip_filetypes = {
-    javascript = { "typescript" },
-    typescript = { "javascript" },
-    vue = { "javascript", "typescript" },
-}
+local is_exists = function(p)
+    return vim.fn.filereadable(p) == 1
+end
 
-mapping.register({
-    {
-        mode = { "i", "s" },
-        lhs = "<tab>",
-        rhs = "vsnip#jumpable(1)? '<Plug>(vsnip-jump-next)':'<tab>'",
-        options = { silent = true, expr = true },
-        description = "Jump to the next fragment placeholder",
-    },
-    {
-        mode = { "i", "s" },
-        lhs = "<s-tab>",
-        rhs = "vsnip#jumpable(-1)?'<Plug>(vsnip-jump-prev)':'<s-tab>'",
-        options = { silent = true, expr = true },
-        description = "Jump to the prev fragment placeholder",
-    },
+-- When the file is opened in a different environment, the code snippet of the file is automatically loaded
+
+-- You can also use add or remove and extend to add or remove fragments
+-- see :h list
+
+local function load_html_snippets()
+    local root_dir = vim.fn.getcwd()
+    ---@diagnostic disable-next-line: missing-parameter
+    local dir_name = vim.fn.expand("%:p:h:t")
+    -- load django template snippets
+    if dir_name == "templates" and is_exists(path_join(root_dir, "manage.py")) then
+        vim.cmd("let g:vsnip_filetypes.html = ['djangohtml']")
+    else
+        vim.cmd("let g:vsnip_filetypes.html = []")
+    end
+end
+
+local function load_ejs_snippets()
+    vim.bo.filetype = "html"
+    vim.cmd([[
+        let g:vsnip_filetypes.html = ['ejs']
+    ]])
+end
+
+local function load_python_snippets()
+    local root_dir = vim.fn.getcwd()
+    -- load django snippets
+    if vim.fn.filereadable(path.join(root_dir, "manage.py")) then
+        vim.cmd("let g:vsnip_filetypes.python = ['django']")
+    else
+        vim.cmd("let g:vsnip_filetypes.python = []")
+    end
+end
+
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+    pattern = { "*.html" },
+    callback = load_html_snippets,
 })
 
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+    pattern = { "*.ejs" },
+    callback = load_ejs_snippets,
+})
+
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+    pattern = { "*.py" },
+    callback = load_python_snippets,
+})
