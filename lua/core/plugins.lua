@@ -126,8 +126,11 @@ return packer.startup(function(use)
 	--]]
     use({ "askfiy/catppuccin", })
     -- 浅色主题
-    use({ "sainnhe/everforest" })
-    use("sainnhe/edge")
+    -- use({ "projekt0n/github-nvim-theme" })
+    use({
+        "ellisonleao/gruvbox.nvim",
+        as = 'gruvbox',
+    })
     -- 欢迎页面
     use("goolord/alpha-nvim")
 
@@ -155,10 +158,6 @@ return packer.startup(function(use)
     use({
         "mbbill/undotree",
         event = { "BufRead", "BufNewFile" },
-    })
-    use({
-        'fgheng/winbar.nvim',
-        event = { 'InsertEnter', 'CursorMoved' },
     })
 
     --[[
@@ -372,6 +371,9 @@ return packer.startup(function(use)
         module = "telescope",
     })
     use({
+        'nvim-telescope/telescope-ui-select.nvim',
+    })
+    use({
         "tami5/sqlite.lua",
         after = { "impatient.nvim" },
     })
@@ -389,12 +391,10 @@ return packer.startup(function(use)
 	 ------ Documentation editing ------
 	=====================================
 	--]]
-    -- use({
-    --     "phaazon/hop.nvim",
-    -- branch = "v1",
-    --     module = "hop",
-    --     cmd = { "HopWord", "HopLine", "HopChar1", "HopChar1CurrentLine" },
-    -- })
+    use({
+        "phaazon/hop.nvim",
+        cmd = { "HopWord", "HopLine", "HopChar1", "HopChar1CurrentLine" },
+    })
     use({
         "kevinhwang91/nvim-hlslens",
         module = "hlslens",

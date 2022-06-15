@@ -14,7 +14,6 @@ M.setup = function()
         "neoformat",
         "sniprun",
         "venn",
-        "hop",
         "vim-vsnip",
         "spellsitter",
         "persisted",

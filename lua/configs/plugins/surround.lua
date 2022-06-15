@@ -3,6 +3,6 @@
 require("surround").setup(
     {
         mappings_style = "surround",
-        space_on_closing_char = true
+        space_on_closing_char = false
     }
 )

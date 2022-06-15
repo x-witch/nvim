@@ -1,13 +1,16 @@
 -- https://github.com/phaazon/hop.nvim
 
-local mapping = require("core.keybinds")
-
-local ok, hop = pcall(require, "hop")
-if not ok then
+local status_ok, hop = pcall(require, 'hop')
+if not status_ok then
+    vim.notify('hop not found')
     return
 end
 
-hop.setup()
+local mapping = require("core.keybinds")
+
+hop.setup({
+    keys = 'etovxqpdygfblzhckisuran'
+})
 
 mapping.register({
     {

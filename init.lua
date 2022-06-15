@@ -16,4 +16,5 @@ require("core.plugins")
 require("core.utils")
 require("configs.plugins")
 require("core.options")
+require("core.themes")
 

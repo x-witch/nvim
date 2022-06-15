@@ -123,24 +123,30 @@ local settings = {
     },
     -- 取消一些内置插件
     disable_builtin_plugins = {
-        -- "netrw",
-        -- "netrwPlugin",
-        "netrwSettings",
-        "netrwFileHandlers",
-        "2html_plugin",
-        "getscript",
-        "getscriptPlugin",
-        "gzip",
-        "logipat",
-        "matchit",
-        "tar",
-        "tarPlugin",
-        "rrhelper",
-        "spellfile_plugin",
-        "vimball",
-        "vimballPlugin",
-        "zip",
-        "zipPlugin",
+        'netrw',
+        'netrwPlugin',
+        'netrwSettings',
+        'netrwFileHandlers',
+        'gzip',
+        'zip',
+        'zipPlugin',
+        'tar',
+        'tarPlugin',
+        'getscript',
+        'getscriptPlugin',
+        'vimball',
+        'vimballPlugin',
+        '2html_plugin',
+        'logipat',
+        'rrhelper',
+        'spellfile_plugin',
+        'matchit',
+        'matchparen',
+        'man',
+        'tutor_mode_plugin',
+        'remote_plugins',
+        'shada_plugin',
+        'filetype',
     },
 }
 
@@ -175,6 +181,5 @@ if vim.bo.fileformat == "unix" then
             end
         end,
     })
-    else
- end
-
+else
+end

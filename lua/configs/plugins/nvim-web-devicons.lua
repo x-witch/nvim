@@ -1,4 +1,11 @@
-require("nvim-web-devicons").setup({
+local ok, web_devicons = pcall(require, 'nvim-web-devicons')
+
+if not ok then
+    vim.notify('nvim-web-devicons not found')
+    return
+end
+
+web_devicons.setup({
   override = {
     html = {
       icon = "",
@@ -37,7 +44,7 @@ require("nvim-web-devicons").setup({
     },
     py = {
       icon = "",
-      color = "#3776AB",
+      color = "#d08770",
       name = "Python",
     },
     json = {

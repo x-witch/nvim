@@ -37,6 +37,7 @@ indent_blankline.setup({
     show_end_of_line = true,
     buftype_exclude = { "terminal", "nofile" },
     filetype_exclude = {
+        "alpha",
         "startify",
         "dashboard",
         "dotooagenda",
@@ -72,3 +73,5 @@ indent_blankline.setup({
         "for",
     },
 })
+
+vim.cmd("autocmd CursorMoved * IndentBlanklineRefresh")

@@ -99,7 +99,7 @@ telescope.setup({
         border = {},
         borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
         use_less = true,
-        set_env = { ["COLORTER"] = "truecolor" },  -- default = nil,
+        set_env = { ["COLORTER"] = "truecolor" }, -- default = nil,
         file_previewer = require("telescope.previewers").vim_buffer_cat.new,
         grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
         qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
@@ -118,8 +118,7 @@ telescope.setup({
         },
     },
 })
-
-
+require("telescope").load_extension("ui-select")
 mapping.register({
     {
         mode = { "n" },
@@ -212,4 +211,3 @@ mapping.register({
         description = "Find all command history",
     },
 })
-
