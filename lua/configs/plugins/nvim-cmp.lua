@@ -118,20 +118,20 @@ cmp.setup {
         ghost_text = false,
         native_menu = false,
     },
-    -- sorting = {
-    --     comparators = {
-    --         cmp.config.compare.length,
-    --         cmp.config.compare.offset,
-    --         cmp.config.compare.exact,
-    --         cmp.config.compare.scopes,
-    --         cmp.config.compare.score,
-    --         cmp.config.compare.recently_used,
-    --         cmp.config.compare.locality,
-    --         cmp.config.compare.kind,
-    --         cmp.config.compare.sort_text,
-    --         cmp.config.compare.order,
-    --     },
-    -- },
+    sorting = {
+        comparators = {
+            cmp.config.compare.length,
+            cmp.config.compare.offset,
+            cmp.config.compare.exact,
+            cmp.config.compare.scopes,
+            cmp.config.compare.score,
+            cmp.config.compare.recently_used,
+            cmp.config.compare.locality,
+            cmp.config.compare.kind,
+            cmp.config.compare.sort_text,
+            cmp.config.compare.order,
+        },
+    },
 }
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).

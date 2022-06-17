@@ -124,7 +124,9 @@ return packer.startup(function(use)
 	 ------------- Theme ---------------
 	=====================================
 	--]]
-    use({ "askfiy/catppuccin", })
+    use({
+        "askfiy/catppuccin",
+    })
     -- 浅色主题
     -- use({ "projekt0n/github-nvim-theme" })
     use({

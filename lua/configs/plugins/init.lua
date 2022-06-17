@@ -17,7 +17,7 @@ M.setup = function()
         "vim-vsnip",
         "spellsitter",
         "persisted",
-        "spectre",
+        "nvim-spectre",
     }
 
     local helper_set = {}

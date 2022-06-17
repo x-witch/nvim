@@ -2,7 +2,7 @@ local _M = {}
 
 _M.colorscheme = {
     light = false,
-    theme = 'gruvbox'
+    theme = 'catppuccin'
 }
 
 -- 用户自定义选项
