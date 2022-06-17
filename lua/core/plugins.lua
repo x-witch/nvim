@@ -277,7 +277,7 @@ return packer.startup(function(use)
         "theHamsta/nvim-dap-virtual-text",
         after = { "nvim-dap" },
     })
-    -- use "mfussenegger/nvim-dap-python"
+    use "mfussenegger/nvim-dap-python"
 
     --[[
 	=====================================

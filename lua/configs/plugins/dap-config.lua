@@ -159,7 +159,7 @@ end
 ----------------------------------------------------------------------
 --                         adapters config                          --
 ----------------------------------------------------------------------
-local debug_config = require('configs.dap.debuger-config').debug_servers
+local debug_config = require('configs.dap.debugers').debug_servers
 local debug_server_names = debug_config.names
 local debug_server_config = debug_config.config
 

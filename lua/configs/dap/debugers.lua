@@ -73,15 +73,16 @@ local debug_server_config = {
                 program = '${file}';
                 args = get_args;
                 pythonPath = function()
-                    local cwd = vim.fn.getcwd()
-                    if vim.fn.executable(cwd .. '/venv/bin/python') == 1 then
-                        return cwd .. '/venv/bin/python'
-                    elseif vim.fn.executable(cwd .. '/.venv/bin/python') == 1 then
-                        return cwd .. '/.venv/bin/python'
-                    else
-                        return 'python'
-                    end
-                end;
+                    -- local cwd = vim.fn.getcwd()
+                    -- if vim.fn.executable(cwd .. '/venv/bin/python') == 1 then
+                    --     return cwd .. '/venv/bin/python'
+                    -- elseif vim.fn.executable(cwd .. '/.venv/bin/python') == 1 then
+                    --     return cwd .. '/.venv/bin/python'
+                    -- else
+                    --     return 'python'
+                    -- end
+                    return vim.g.python_path
+                end
             }
 
         },
@@ -91,15 +92,15 @@ local debug_server_config = {
 _M.debug_servers = {
     names = {
         python = 'python',
-        -- cpp = 'cppdbg',
-        -- c = 'c',
-        -- rust = 'rust',
+        cpp = 'cppdbg',
+        c = 'c',
+        rust = 'rust',
     },
     config = {
         python = debug_server_config.python,
-        -- cpp = debug_server_config.cpp,
-        -- c = debug_server_config.cpp,
-        -- rust = debug_server_config.cpp
+        cpp = debug_server_config.cpp,
+        c = debug_server_config.cpp,
+        rust = debug_server_config.cpp
     }
 }
 
