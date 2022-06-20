@@ -8,7 +8,7 @@ end
 -- vim.g.indentLine_enabled = 1
 -- vim.g.indent_blankline_char = "│"
 -- vim.g.indent_blankline_char = "▎"
-vim.g.indent_blankline_char = "▏"
+-- vim.g.indent_blankline_char = "▏"
 vim.opt.termguicolors = true
 vim.opt.list = true
 vim.cmd [[highlight IndentBlanklineIndent1 guifg=#E06C75 gui=nocombine]]
@@ -19,6 +19,7 @@ vim.cmd [[highlight IndentBlanklineIndent5 guifg=#61AFEF gui=nocombine]]
 vim.cmd [[highlight IndentBlanklineIndent6 guifg=#C678DD gui=nocombine]]
 
 indent_blankline.setup({
+    char = "▏",
     space_char_blankline = " ",
     show_current_context = true,
     show_current_context_start = true,
