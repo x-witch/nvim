@@ -33,7 +33,7 @@ local mapping = require("core.keybinds")
 
 
 ----------------------------------------------------------------------
---                              icons                               --
+--                              设置断点样式icons                               --
 ----------------------------------------------------------------------
 local dap_breakpoint = {
     error = {
@@ -97,19 +97,6 @@ end
 ----------------------------------------------------------------------
 -- https://github.com/mfussenegger/nvim-dap/wiki/Cookbook
 
--- dap.listeners.after.event_initialized["dapui_config"] = function()
---     debug_open()
--- end
--- dap.listeners.after.event_terminated["dapui_config"] = function()
---     debug_close()
--- end
--- dap.listeners.before.event_exited["dapui_config"] = function()
---     debug_close()
--- end
--- dap.listeners.before.disconnect["dapui_config"] = function()
---     debug_close()
--- end
-
 local keymap_restore = {}
 
 dap.listeners.after['event_initialized']['me'] = function()
@@ -151,34 +138,25 @@ dap.listeners.before['disconnect']['me'] = function()
     close_terminal()
 end
 
--- dap.listeners.after['disconnect']['me'] = function()
---     close_repl()
--- end
+dap.listeners.after['disconnect']['me'] = function()
+    close_repl()
+end
 
 
 ----------------------------------------------------------------------
 --                         adapters config                          --
 ----------------------------------------------------------------------
-local debug_config = require('configs.dap.debugers').debug_servers
-local debug_server_names = debug_config.names
-local debug_server_config = debug_config.config
 
-for k_name, v_name in pairs(debug_server_names) do
-    if debug_server_config[k_name] ~= nil then
-        dap.adapters[v_name] = debug_server_config[k_name]['adapter']
-        dap.configurations[k_name] = debug_server_config[k_name]['config']
-    end
+local dap_config = {
+    python = require("configs.dap.python"),
+    -- go = require("configs.dap.go")
+}
+
+-- 设置调试器
+for dap_name, dap_options in pairs(dap_config) do
+    dap.adapters[dap_name] = dap_options.adapters
+    dap.configurations[dap_name] = dap_options.configurations
 end
-
-
-
--- load from json file
--- require('dap.ext.vscode').load_launchjs(nil, { cppdbg = { 'cpp' } })
--- -- config per launage
---
--- require("configs.dap.go")
--- require("configs.dap.python")
--- require("configs.dap.lua")
 
 
 ----------------------------------------------------------------------
@@ -187,19 +165,12 @@ end
 mapping.register({
     {
         mode = { "n" },
-        lhs = "<leader>du",
-        rhs = "<cmd>lua require'dapui'.toggle()<CR>",
-        options = { silent = true },
-        description = "显示或隐藏调试界面",
-    },
-    {
-        mode = { "n" },
         lhs = "<leader>db",
         rhs = function()
             require("dap").toggle_breakpoint()
         end,
         options = { silent = true },
-        description = "rk or delete breakpoints",
+        description = "打断点或删除断点",
     },
     {
         mode = { "n" },
@@ -215,7 +186,7 @@ mapping.register({
                     return
                 end
             end
-            -- require("dapui").eval(vim.fn.input("Enter debug expression: "))
+            require("dapui").eval(vim.fn.input("Enter debug expression: "))
         end,
         options = { silent = true },
         description = "Execute debug expressions",
@@ -236,7 +207,7 @@ mapping.register({
             require("dap").continue()
         end,
         options = { silent = true },
-        description = "Enable debugging or jump to the next breakpoint",
+        description = "开启调试或到下一个断点处",
     },
     {
         mode = { "n" },
@@ -245,7 +216,7 @@ mapping.register({
             require("dap").step_into()
         end,
         options = { silent = true },
-        description = "Step into",
+        description = "单步进入执行（会进入函数内部，有回溯阶段）",
     },
     {
         mode = { "n" },
@@ -255,7 +226,7 @@ mapping.register({
             require("dap").step_over()
         end,
         options = { silent = true },
-        description = "Step over",
+        description = "单步跳过执行（不进入函数内部，无回溯阶段）",
     },
     {
         mode = { "n" },
@@ -264,7 +235,7 @@ mapping.register({
             require("dap").step_out()
         end,
         options = { silent = true },
-        description = "Step out",
+        description = "步出当前函数",
     },
     {
         mode = { "n" },
@@ -273,7 +244,7 @@ mapping.register({
             require("dap").run_last()
         end,
         options = { silent = true },
-        description = "Rerun debug",
+        description = "重启调试",
     },
     {
         mode = { "n" },
@@ -284,4 +255,11 @@ mapping.register({
         options = { silent = true },
         description = "Close debug",
     },
+    -- {
+    --     mode = { "n" },
+    --     lhs = "<F10>",
+    --     rhs = "<cmd>lua require'dap'.close()<CR><cmd>lua require'dap.repl'.close()<CR><cmd>lua require'dapui'.close()<CR><cmd>DapVirtualTextForceRefresh<CR>",
+    --     options = { silent = true },
+    --     description = "退出调试（关闭调试，关闭 repl，关闭 ui，清除内联文本）",
+    -- },
 })

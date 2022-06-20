@@ -17,7 +17,7 @@ treesitter.setup({
         enable = true,
         -- 使用 treesitter 高亮而不是 neovim 内置的高亮
         additional_vim_regex_highlighting = false,
-        use_languagetree = true,
+        -- use_languagetree = true,
     },
     -- 根据当前上下文定义文件类型，由 nvim-ts-context-commentstring 插件提供
     context_commentstring = {

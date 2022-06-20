@@ -263,21 +263,17 @@ return packer.startup(function(use)
 	--]]
     use({
         "mfussenegger/nvim-dap",
-        module = "dap",
+        -- module = "dap",
     })
     use({
         "rcarriga/nvim-dap-ui",
-        after = { "nvim-dap" },
+        -- after = { "nvim-dap" },
     })
-    -- use({
-    --     "ravenxrz/DAPInstall.nvim",
-    --     after = { "nvim-dap" },
-    -- })
     use({
         "theHamsta/nvim-dap-virtual-text",
-        after = { "nvim-dap" },
+        -- after = { "nvim-dap" }
     })
-    use "mfussenegger/nvim-dap-python"
+    -- use "mfussenegger/nvim-dap-python"
 
     --[[
 	=====================================

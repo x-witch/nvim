@@ -1,5 +1,5 @@
 -- https://github.com/olimorris/persisted.nvim
-
+-- 用于 Neovim 中的自动会话管理。
 local mapping = require("core.keybinds")
 
 local ok, persisted = pcall(require, "persisted")
