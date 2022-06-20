@@ -12,8 +12,8 @@ comment.setup({
         block = "gcb",
     },
     opleader = {
-        line = "gcv",
-        block = "gbv",
+        line = "gc",
+        block = "gb",
     },
     extra = {
         above = "gck",

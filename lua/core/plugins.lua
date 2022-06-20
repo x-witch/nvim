@@ -313,8 +313,8 @@ return packer.startup(function(use)
     use({
         "nvim-treesitter/nvim-treesitter",
         run = ":TSUpdate",
-        -- event = { "BufRead", "BufNewFile" },
-        event = { 'InsertEnter', 'CursorMoved', 'WinScrolled' },
+        event = { "BufRead", "BufNewFile" },
+        -- event = { 'InsertEnter', 'CursorMoved', 'WinScrolled' },
     })
     -- use({
     --     "lewis6991/spellsitter.nvim",
