@@ -127,8 +127,6 @@ return packer.startup(function(use)
     use({
         "askfiy/catppuccin",
     })
-    -- 浅色主题
-    -- use({ "projekt0n/github-nvim-theme" })
     use({
         "ellisonleao/gruvbox.nvim",
         as = 'gruvbox',
